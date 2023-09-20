@@ -29,50 +29,17 @@ namespace Contacts.Model
         /// <summary>
         /// Свойство имени в контакте пользователя.
         /// </summary>
-        public string Name
-        {
-            get
-            {
-                return _name;
-            }
-            set
-            {
-                Services.ContactValidator.AssertName(value);
-                _name = value;
-            }
-        }
+        public string Name { get; set; }
 
         /// <summary>
         /// Свойство номера в контакте пользователя.
         /// </summary>
-        public string Number
-        {
-            get
-            {
-                return _number;
-            }
-            set
-            {
-                Services.ContactValidator.AssertNumber(value);
-                _number = value;
-            }
-        }
+        public string Number { get; set; }
 
         /// <summary>
         /// Свойство имени в контакте пользователя.
         /// </summary>
-        public string Email
-        {
-            get
-            {
-                return _email;
-            }
-            set
-            {
-                Services.ContactValidator.AssertEmail(value);
-                _email = value;
-            }
-        }
+        public string Email { get; set; }
 
         /// <summary>
         /// Конструктор класса <see cref="Contact"/> без параметров.

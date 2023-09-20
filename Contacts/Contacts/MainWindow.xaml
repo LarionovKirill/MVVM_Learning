@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:Contacts"
+        xmlns:viewmodel="clr-namespace:Contacts.ViewModel" d:DataContext="{d:DesignInstance Type=viewmodel:MainVM}"
         mc:Ignorable="d"
         Title="MainWindow" Height="407" Width="509">
     <Grid Margin="0">
@@ -11,28 +11,28 @@
             <RowDefinition/>
             <RowDefinition Height="0*"/>
         </Grid.RowDefinitions>
-        <Button Content="Save" HorizontalAlignment="Left" Margin="325,338,0,0" VerticalAlignment="Top" Width="75" Height="25"/>
-        <Button Content="Load" HorizontalAlignment="Left" Margin="405,338,0,0" VerticalAlignment="Top" Width="75" Height="25" RenderTransformOrigin="0.493,0.6"/>
+        <Button Content="Save" HorizontalAlignment="Left" Margin="325,338,0,0" VerticalAlignment="Top" Width="75" Height="25"
+                Command="{Binding Save}"/>
+        <Button Content="Load" HorizontalAlignment="Left" Margin="405,338,0,0" VerticalAlignment="Top" Width="75" Height="25"/>
         <GroupBox Header="Read Contact" Height="314" Margin="250,15,15,0" VerticalAlignment="Top" Padding="0" Width="224">
             <StackPanel HorizontalAlignment="Left" Width="206" Margin="3">
-                <Label Content="Name:"/>
-                <Label Content="" FontWeight="Bold"/>
-                <Label Content="Phone Number:"/>
-                <Label Content="" FontWeight="Bold"/>
-                <Label Content="Email:"/>
-                <Label Content="" FontWeight="Bold"/>
+                <TextBlock Text="Name:" Padding="3"/>
+                <TextBlock Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" FontWeight="Bold" Padding="3"/>
+                <TextBlock Text="Phone Number:" Padding="3"/>
+                <TextBlock Text="{Binding Number, UpdateSourceTrigger=PropertyChanged}" FontWeight="Bold" Padding="3"/>
+                <TextBlock Text="Email:" Padding="3"/>
+                <TextBlock Text="{Binding Email, UpdateSourceTrigger=PropertyChanged}" FontWeight="Bold" Padding="3"/>
             </StackPanel>
         </GroupBox>
         <GroupBox Header="Edit Contact" HorizontalAlignment="Left" Height="314" Margin="15,15,0,0" VerticalAlignment="Top" Width="224">
             <StackPanel HorizontalAlignment="Left" Height="286" Margin="3" VerticalAlignment="Top" Width="201">
-                <Label Content="Name:"/>
-                <TextBox Height="23" TextWrapping="Wrap" Text=""/>
-                <Label Content="Phone Number:"/>
-                <TextBox Height="23" TextWrapping="Wrap" Text=""/>
-                <Label Content="Email:"/>
-                <TextBox Height="23" TextWrapping="Wrap" Text=""/>
+                <TextBlock Text="Name:" Padding="3"/>
+                <TextBox Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"/>
+                <TextBlock Text="Phone Number:" Padding="3"/>
+                <TextBox Text="{Binding Number, UpdateSourceTrigger=PropertyChanged}"/>
+                <TextBlock Text="Email:" Padding="3"/>
+                <TextBox Text="{Binding Email, UpdateSourceTrigger=PropertyChanged}"/>
             </StackPanel>
         </GroupBox>
-
     </Grid>
 </Window>

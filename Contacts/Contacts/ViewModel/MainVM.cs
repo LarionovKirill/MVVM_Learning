@@ -21,7 +21,7 @@ namespace Contacts.ViewModel
             {
                 return Contact.Name;
             }
-            set 
+            set
             {
                 Contact.Name = value;
                 OnPropertyChanged(nameof(Name));
