@@ -5,8 +5,34 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Contacts"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
-        
+        Title="MainWindow" Height="407" Width="509">
+    <Grid Margin="0">
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition Height="0*"/>
+        </Grid.RowDefinitions>
+        <Button Content="Save" HorizontalAlignment="Left" Margin="325,338,0,0" VerticalAlignment="Top" Width="75" Height="25"/>
+        <Button Content="Load" HorizontalAlignment="Left" Margin="405,338,0,0" VerticalAlignment="Top" Width="75" Height="25" RenderTransformOrigin="0.493,0.6"/>
+        <GroupBox Header="Read Contact" Height="314" Margin="250,15,15,0" VerticalAlignment="Top" Padding="0" Width="224">
+            <StackPanel HorizontalAlignment="Left" Width="206" Margin="3">
+                <Label Content="Name:"/>
+                <Label Content="" FontWeight="Bold"/>
+                <Label Content="Phone Number:"/>
+                <Label Content="" FontWeight="Bold"/>
+                <Label Content="Email:"/>
+                <Label Content="" FontWeight="Bold"/>
+            </StackPanel>
+        </GroupBox>
+        <GroupBox Header="Edit Contact" HorizontalAlignment="Left" Height="314" Margin="15,15,0,0" VerticalAlignment="Top" Width="224">
+            <StackPanel HorizontalAlignment="Left" Height="286" Margin="3" VerticalAlignment="Top" Width="201">
+                <Label Content="Name:"/>
+                <TextBox Height="23" TextWrapping="Wrap" Text=""/>
+                <Label Content="Phone Number:"/>
+                <TextBox Height="23" TextWrapping="Wrap" Text=""/>
+                <Label Content="Email:"/>
+                <TextBox Height="23" TextWrapping="Wrap" Text=""/>
+            </StackPanel>
+        </GroupBox>
+
     </Grid>
 </Window>

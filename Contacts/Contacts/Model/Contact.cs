@@ -9,7 +9,7 @@ namespace Contacts.Model
     /// <summary>
     /// Класс контакта
     /// </summary>
-    class Contact
+    public class Contact
     {
         /// <summary>
         /// Имя человека в контакте пользователя.
