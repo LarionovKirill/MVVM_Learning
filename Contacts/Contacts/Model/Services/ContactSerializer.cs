@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Newtonsoft.Json;
 
 namespace Contacts.Model.Services
@@ -11,10 +7,13 @@ namespace Contacts.Model.Services
     /// <summary>
     /// Класс сериализации контакта.
     /// </summary>
-    public class ContactSerializer
+    public static class ContactSerializer
     {
-
-        private string DefaultPath
+        /// <summary>
+        /// Метод возвращает путь для записи или чтения JSON файла.
+        /// </summary>
+        /// <returns>Путь к файлу.</returns>
+        private static string DefaultPath
         {
             get
             {
@@ -26,7 +25,7 @@ namespace Contacts.Model.Services
         /// Метод серилиазует контакт в json файл.
         /// </summary>
         /// <param name="contact">Переданный контакт.</param>
-        public void SaveContact(Contact contact)
+        public static void SaveContact(Contact contact)
         {
             var json = JsonConvert.SerializeObject(contact, Formatting.Indented);
             File.WriteAllText(DefaultPath, json);
@@ -36,7 +35,7 @@ namespace Contacts.Model.Services
         /// Метод осуществялет загрузку контакта из Json-файла.
         /// </summary>
         /// <returns>Записанный контакт.</returns>
-        public Contact LoadContact()
+        public static Contact LoadContact()
         {
             var contact = new Contact();
 

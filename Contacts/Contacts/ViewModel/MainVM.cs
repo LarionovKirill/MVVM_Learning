@@ -1,11 +1,22 @@
 ﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using Contacts.Model;
+using Contacts.Model.Services;
 
 namespace Contacts.ViewModel
 {
     class MainVM : INotifyPropertyChanged
     {
+        /// <summary>
+        /// Поле обработчика команды загрузки.
+        /// </summary>
+        private LoadCommand _loadCommand;
+
+        /// <summary>
+        /// Поле обработчика команды сохранения.
+        /// </summary>
+        private SaveCommand _saveCommand;
+
         /// <summary>
         /// Экземпляр контакта.
         /// </summary>
@@ -59,6 +70,49 @@ namespace Contacts.ViewModel
             {
                 Contact.Email = value;
                 OnPropertyChanged(nameof(Email));
+            }
+        }
+
+        /// <summary>
+        /// Свойство команды сохранения.
+        /// </summary>
+        public SaveCommand SaveCommand
+        {
+            get
+            {
+                return _saveCommand ??
+                    (_saveCommand = new SaveCommand(obj =>
+                    {
+                        try
+                        {
+                            ContactValidator.AssertEmail(Contact.Email);
+                            ContactValidator.AssertNumber(Contact.Number);
+                            ContactValidator.AssertName(Contact.Name);
+                            ContactSerializer.SaveContact(Contact);
+                        }
+                        catch
+                        {
+                            int a = 0;
+                        }
+                    }));
+            }
+        }
+
+        /// <summary>
+        /// Свойство команды загрузки.
+        /// </summary>
+        public LoadCommand LoadCommand
+        {
+            get
+            {
+                return _loadCommand ??
+                    (_loadCommand = new LoadCommand(obj =>
+                    {
+                        var contact = ContactSerializer.LoadContact();
+                        Name = contact.Name;
+                        Number = contact.Number;
+                        Email = contact.Email;
+                    }));
             }
         }
 

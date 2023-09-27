@@ -12,8 +12,9 @@
             <RowDefinition Height="0*"/>
         </Grid.RowDefinitions>
         <Button Content="Save" HorizontalAlignment="Left" Margin="325,338,0,0" VerticalAlignment="Top" Width="75" Height="25"
-                Command="{Binding Save}"/>
-        <Button Content="Load" HorizontalAlignment="Left" Margin="405,338,0,0" VerticalAlignment="Top" Width="75" Height="25"/>
+                Command="{Binding SaveCommand}"/>
+        <Button Content="Load" HorizontalAlignment="Left" Margin="405,338,0,0" VerticalAlignment="Top" Width="75" Height="25"
+                Command="{Binding LoadCommand}"/>
         <GroupBox Header="Read Contact" Height="314" Margin="250,15,15,0" VerticalAlignment="Top" Padding="0" Width="224">
             <StackPanel HorizontalAlignment="Left" Width="206" Margin="3">
                 <TextBlock Text="Name:" Padding="3"/>

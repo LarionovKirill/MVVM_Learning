@@ -1,9 +1,5 @@
 ﻿using System;
 using System.Windows.Input;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Contacts.ViewModel
 {
@@ -13,15 +9,26 @@ namespace Contacts.ViewModel
     /// </summary>
     class LoadCommand : ICommand
     {
+
+        /// <summary>
+        /// Вызывается при условии, что метод может быть вополнен.
+        /// </summary>
+        public event EventHandler CanExecuteChanged;
+
+
         /// <summary>
         /// Делегат описание действий метода.
         /// </summary>
         private Action<object> _action;
 
         /// <summary>
-        /// Вызывается при условии, что метод может быть вополнен.
+        /// Создаёт экземпляр класса <see cref="LoadCommand"/>.
         /// </summary>
-        public event EventHandler CanExecuteChanged;
+        /// <param name="execute">Описание логики команды.</param>
+        public LoadCommand(Action<object> execute)
+        {
+            this._action = execute;
+        }
 
         /// <summary>
         /// Определяет позможность выполнения метода.

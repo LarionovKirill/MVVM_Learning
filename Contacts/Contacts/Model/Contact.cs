@@ -11,20 +11,6 @@ namespace Contacts.Model
     /// </summary>
     public class Contact
     {
-        /// <summary>
-        /// Имя человека в контакте пользователя.
-        /// </summary>
-        private string _name;
-
-        /// <summary>
-        /// Электронный адрес человека в контакте пользователя.
-        /// </summary>
-        private string _email;
-
-        /// <summary>
-        /// Номер человека в контакте пользователя.
-        /// </summary>
-        private string _number;
 
         /// <summary>
         /// Свойство имени в контакте пользователя.
@@ -46,7 +32,7 @@ namespace Contacts.Model
         /// </summary>
         public Contact()
         {
-            
+
         }
 
         /// <summary>
