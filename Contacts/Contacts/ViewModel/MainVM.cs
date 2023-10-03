@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel;
+using System.Windows;
 using System.Runtime.CompilerServices;
 using Contacts.Model;
 using Contacts.Model.Services;
@@ -58,7 +59,7 @@ namespace Contacts.ViewModel
 
         /// <summary>
         /// Возращает и задает номер контакта.
-        /// Формат вводимых данных: 79224566545.
+        /// Формат вводимых данных: something@gmail.com.
         /// </summary>
         public string Email
         {
@@ -89,10 +90,11 @@ namespace Contacts.ViewModel
                             ContactValidator.AssertNumber(Contact.Number);
                             ContactValidator.AssertName(Contact.Name);
                             ContactSerializer.SaveContact(Contact);
+                            MessageBox.Show("Данные успешно сохранены.");
                         }
                         catch
                         {
-                            int a = 0;
+                            MessageBox.Show("Введите вверное значение.");
                         }
                     }));
             }
