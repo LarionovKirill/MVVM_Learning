@@ -9,10 +9,6 @@ namespace Contacts.ViewModel
 {
     class MainVM : INotifyPropertyChanged
     {
-        /// <summary>
-        /// Поле обработчика команды загрузки.
-        /// </summary>
-        private LoadCommand _loadCommand;
 
         /// <summary>
         /// Поле обработчика команды сохранения.
@@ -129,26 +125,14 @@ namespace Contacts.ViewModel
                             Contacts.Add(Contact);
                             ContactSerializer.SaveContact(Contacts);
                             MessageBox.Show("Данные успешно сохранены.");
+                            IsVisible = false;
+                            ReadOnly = true;
+                            IsEnabled = true;
                         }
                         catch
                         {
                             MessageBox.Show("Введите вверное значение.");
                         }
-                    }));
-            }
-        }
-
-        /// <summary>
-        /// Свойство команды загрузки.
-        /// </summary>
-        public LoadCommand LoadCommand
-        {
-            get
-            {
-                return _loadCommand ??
-                    (_loadCommand = new LoadCommand(obj =>
-                    {
-                        var contact = ContactSerializer.LoadContact();
                     }));
             }
         }
@@ -168,10 +152,8 @@ namespace Contacts.ViewModel
                         Email = contact.Email;
                         Number = contact.Number;
                         IsVisible = true;
-                        IsEnabled = false;
+                        IsEnabled = true;
                         ReadOnly = false;
-                        Contacts[Contacts.Count-1].Name = "Anton";
-                        OnPropertyChanged("");
                     }));
             }
         }
@@ -187,7 +169,9 @@ namespace Contacts.ViewModel
                 return _applyCommand ??
                     (_applyCommand = new RelayCommand(obj =>
                     {
-                        IsVisible = true;
+                        IsVisible = false;
+                        IsEnabled = true;
+                        ReadOnly = true;
                     }));
             }
         }
@@ -195,14 +179,33 @@ namespace Contacts.ViewModel
         /// <summary>
         /// Свойство подтверждения контакта для привязки его ко View.
         /// </summary>
-        public RelayCommand Test
+        public RelayCommand DeleteCommand
         {
             get
             {
                 return _applyCommand ??
                     (_applyCommand = new RelayCommand(obj =>
                     {
-                        int a = 0;
+                        var index = Contacts.IndexOf(SelectedItem);
+                        if (index == 0 && Contacts.Count == 1)
+                        {
+                            SelectedItem = null;
+                        }
+                        else if (index == 0)
+                        {
+                            Contacts.RemoveAt(index);
+                            SelectedItem = Contacts[0];
+                        }
+                        else if (index == Contacts.Count - 1)
+                        {
+                            Contacts.RemoveAt(index);
+                            SelectedItem = Contacts[index - 1];
+                        }
+                        else
+                        {
+                            Contacts.RemoveAt(index);
+                            SelectedItem = Contacts[index];
+                        }
                     }));
             }
         }
@@ -264,9 +267,13 @@ namespace Contacts.ViewModel
             set
             {
                 _selectedItem = value;
-                Name = _selectedItem.Name;
-                Number = _selectedItem.Number;
-                Email = _selectedItem.Email;
+                if (_selectedItem != null)
+                {
+                    Name = _selectedItem.Name;
+                    Number = _selectedItem.Number;
+                    Email = _selectedItem.Email;
+                }
+                ActivateButtons();
                 OnPropertyChanged(nameof(SelectedItem));
             }
         }
@@ -284,6 +291,16 @@ namespace Contacts.ViewModel
         {
             if (PropertyChanged != null)
                 PropertyChanged(this, new PropertyChangedEventArgs(prop));
+        }
+
+        /// <summary>
+        /// Активирует кнопки и работу с текстом.
+        /// </summary>
+        private void ActivateButtons()
+        {
+            IsEnabled = true;
+            IsVisible = true;
+            ReadOnly = false;
         }
     }
 }
