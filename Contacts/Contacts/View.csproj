@@ -58,7 +58,6 @@
     <Compile Include="Model\Services\ContactGenerator.cs" />
     <Compile Include="Model\Services\ContactSerializer.cs" />
     <Compile Include="Model\Services\Converter.cs" />
-    <Compile Include="ViewModel\ContactVM.cs" />
     <Compile Include="ViewModel\LoadCommand.cs" />
     <Compile Include="ViewModel\MainVM.cs" />
     <Compile Include="ViewModel\RelayCommand.cs" />

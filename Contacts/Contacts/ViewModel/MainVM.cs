@@ -30,16 +30,6 @@ namespace Contacts.ViewModel
         private RelayCommand _applyCommand;
 
         /// <summary>
-        /// Поле обработчика команды добавления.
-        /// </summary>
-        private RelayCommand _enabledCommand;
-
-        /// <summary>
-        /// Поле обработчика команды добавления.
-        /// </summary>
-        private RelayCommand _readOnlyCommand;
-
-        /// <summary>
         /// Поле видимости.
         /// </summary>
         private bool _isVisible;
@@ -55,9 +45,9 @@ namespace Contacts.ViewModel
         private bool _readOnly = true;
 
         /// <summary>
-        /// Поле активности кнопок.
+        /// Выбраный элемент
         /// </summary>
-        private int _selectedItem = -1;
+        private Contact _selectedItem;
 
         /// <summary>
         /// Экземпляр контакта.
@@ -180,6 +170,8 @@ namespace Contacts.ViewModel
                         IsVisible = true;
                         IsEnabled = false;
                         ReadOnly = false;
+                        Contacts[Contacts.Count-1].Name = "Anton";
+                        OnPropertyChanged("");
                     }));
             }
         }
@@ -201,31 +193,16 @@ namespace Contacts.ViewModel
         }
 
         /// <summary>
-        /// Свойство активности кнопки для привязки его ко View.
+        /// Свойство подтверждения контакта для привязки его ко View.
         /// </summary>
-        public RelayCommand EnabledCommand
+        public RelayCommand Test
         {
             get
             {
-                return _enabledCommand ??
-                    (_enabledCommand = new RelayCommand(obj =>
+                return _applyCommand ??
+                    (_applyCommand = new RelayCommand(obj =>
                     {
-                        IsEnabled = true;
-                    }));
-            }
-        }
-
-        /// <summary>
-        /// Свойство активности кнопки для привязки его ко View.
-        /// </summary>
-        public RelayCommand ReadOnlyCommand
-        {
-            get
-            {
-                return _readOnlyCommand ??
-                    (_readOnlyCommand = new RelayCommand(obj =>
-                    {
-                        ReadOnly = true;
+                        int a = 0;
                     }));
             }
         }
@@ -242,7 +219,7 @@ namespace Contacts.ViewModel
             set
             {
                 _isVisible = value;
-                OnPropertyChanged();
+                OnPropertyChanged(nameof(IsVisible));
             }
         }
 
@@ -258,7 +235,7 @@ namespace Contacts.ViewModel
             set
             {
                 _isEnabled = value;
-                OnPropertyChanged();
+                OnPropertyChanged(nameof(IsEnabled));
             }
         }
 
@@ -274,23 +251,23 @@ namespace Contacts.ViewModel
             set
             {
                 _readOnly = value;
-                OnPropertyChanged();
+                OnPropertyChanged(nameof(ReadOnly));
             }
         }
 
-        /// <summary>
-        /// Свойство видимости для привязки.
-        /// </summary>
-        public int SelectedItem
+        public Contact SelectedItem
         {
-            get
-            {
-                return _selectedItem;
+            get 
+            { 
+                return _selectedItem; 
             }
             set
             {
                 _selectedItem = value;
-                OnPropertyChanged();
+                Name = _selectedItem.Name;
+                Number = _selectedItem.Number;
+                Email = _selectedItem.Email;
+                OnPropertyChanged(nameof(SelectedItem));
             }
         }
 

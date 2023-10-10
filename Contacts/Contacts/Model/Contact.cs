@@ -1,15 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel;
 
 namespace Contacts.Model
 {
     /// <summary>
     /// Класс контакта
     /// </summary>
-    public class Contact
+    public class Contact : INotifyPropertyChanged
     {
         /// <summary>
         /// Свойство имени в контакте пользователя.
@@ -46,5 +42,7 @@ namespace Contacts.Model
             Number = _number;
             Email = _email;
         }
+
+        public event PropertyChangedEventHandler PropertyChanged;
     }
 }
