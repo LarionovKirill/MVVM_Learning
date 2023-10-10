@@ -3,6 +3,7 @@ using System.Windows;
 using System.Runtime.CompilerServices;
 using Contacts.Model;
 using Contacts.Model.Services;
+using System.Collections.ObjectModel;
 
 namespace Contacts.ViewModel
 {
@@ -19,9 +20,55 @@ namespace Contacts.ViewModel
         private SaveCommand _saveCommand;
 
         /// <summary>
+        /// Поле обработчика команды добавления.
+        /// </summary>
+        private RelayCommand _addCommand;
+
+        /// <summary>
+        /// Поле обработчика команды добавления.
+        /// </summary>
+        private RelayCommand _applyCommand;
+
+        /// <summary>
+        /// Поле обработчика команды добавления.
+        /// </summary>
+        private RelayCommand _enabledCommand;
+
+        /// <summary>
+        /// Поле обработчика команды добавления.
+        /// </summary>
+        private RelayCommand _readOnlyCommand;
+
+        /// <summary>
+        /// Поле видимости.
+        /// </summary>
+        private bool _isVisible;
+
+        /// <summary>
+        /// Поле активности кнопок.
+        /// </summary>
+        private bool _isEnabled;
+
+        /// <summary>
+        /// Поле активности кнопок.
+        /// </summary>
+        private bool _readOnly = true;
+
+        /// <summary>
+        /// Поле активности кнопок.
+        /// </summary>
+        private int _selectedItem = -1;
+
+        /// <summary>
         /// Экземпляр контакта.
         /// </summary>
         public Contact Contact { get; set; } = new Contact();
+
+        /// <summary>
+        /// Свойство массива контактов.
+        /// </summary>
+        public ObservableCollection<Contact> Contacts { get; set; }
+            = ContactSerializer.LoadContact();
 
         /// <summary>
         /// Возращает и задает имя контакта.
@@ -89,7 +136,8 @@ namespace Contacts.ViewModel
                             ContactValidator.AssertEmail(Contact.Email);
                             ContactValidator.AssertNumber(Contact.Number);
                             ContactValidator.AssertName(Contact.Name);
-                            ContactSerializer.SaveContact(Contact);
+                            Contacts.Add(Contact);
+                            ContactSerializer.SaveContact(Contacts);
                             MessageBox.Show("Данные успешно сохранены.");
                         }
                         catch
@@ -111,10 +159,138 @@ namespace Contacts.ViewModel
                     (_loadCommand = new LoadCommand(obj =>
                     {
                         var contact = ContactSerializer.LoadContact();
-                        Name = contact.Name;
-                        Number = contact.Number;
-                        Email = contact.Email;
                     }));
+            }
+        }
+
+        /// <summary>
+        /// Свойство автодобавления контакта для привязки его ко View.
+        /// </summary>
+        public RelayCommand AddCommand
+        {
+            get
+            {
+                return _addCommand ??
+                    (_addCommand = new RelayCommand(obj =>
+                    {
+                        var contact = ContactGenerator.GenerateContact();
+                        Name = contact.Name;
+                        Email = contact.Email;
+                        Number = contact.Number;
+                        IsVisible = true;
+                        IsEnabled = false;
+                        ReadOnly = false;
+                    }));
+            }
+        }
+
+
+        /// <summary>
+        /// Свойство подтверждения контакта для привязки его ко View.
+        /// </summary>
+        public RelayCommand ApplyCommand
+        {
+            get
+            {
+                return _applyCommand ??
+                    (_applyCommand = new RelayCommand(obj =>
+                    {
+                        IsVisible = true;
+                    }));
+            }
+        }
+
+        /// <summary>
+        /// Свойство активности кнопки для привязки его ко View.
+        /// </summary>
+        public RelayCommand EnabledCommand
+        {
+            get
+            {
+                return _enabledCommand ??
+                    (_enabledCommand = new RelayCommand(obj =>
+                    {
+                        IsEnabled = true;
+                    }));
+            }
+        }
+
+        /// <summary>
+        /// Свойство активности кнопки для привязки его ко View.
+        /// </summary>
+        public RelayCommand ReadOnlyCommand
+        {
+            get
+            {
+                return _readOnlyCommand ??
+                    (_readOnlyCommand = new RelayCommand(obj =>
+                    {
+                        ReadOnly = true;
+                    }));
+            }
+        }
+
+        /// <summary>
+        /// Свойство видимости для привязки.
+        /// </summary>
+        public bool IsVisible
+        {
+            get
+            {
+                return _isVisible;
+            }
+            set
+            {
+                _isVisible = value;
+                OnPropertyChanged();
+            }
+        }
+
+        /// <summary>
+        /// Свойство видимости для привязки.
+        /// </summary>
+        public bool IsEnabled
+        {
+            get
+            {
+                return _isEnabled;
+            }
+            set
+            {
+                _isEnabled = value;
+                OnPropertyChanged();
+            }
+        }
+
+        /// <summary>
+        /// Свойство видимости для привязки.
+        /// </summary>
+        public bool ReadOnly
+        {
+            get
+            {
+                return _readOnly;
+            }
+            set
+            {
+                _readOnly = value;
+                OnPropertyChanged();
+            }
+        }
+
+        /// <summary>
+        /// Свойство видимости для привязки.
+        /// </summary>
+        public int SelectedItem
+        {
+            get
+            {
+                return _selectedItem;
+            }
+            set
+            {
+                _selectedItem = value;
+                OnPropertyChanged();
             }
         }
 

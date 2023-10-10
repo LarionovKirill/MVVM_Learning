@@ -11,7 +11,6 @@ namespace Contacts.Model
     /// </summary>
     public class Contact
     {
-
         /// <summary>
         /// Свойство имени в контакте пользователя.
         /// </summary>

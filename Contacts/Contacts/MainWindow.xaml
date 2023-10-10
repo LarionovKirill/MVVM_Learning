@@ -4,6 +4,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:model="clr-namespace:Contacts.Model.Services"
     xmlns:viewmodel="clr-namespace:Contacts.ViewModel"
     Title="Contacts"
     MinWidth="800"
@@ -11,6 +12,9 @@
     d:DataContext="{d:DesignInstance Type=viewmodel:MainVM}"
     SizeToContent="WidthAndHeight"
     mc:Ignorable="d">
+    <Window.Resources>
+        <model:Converter x:Key="Converter"/>
+    </Window.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="270"/>
@@ -23,9 +27,9 @@
             Header="Список пользователей">
             <Grid Grid.Column="0">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="80"/>
-                    <ColumnDefinition Width="80"/>
-                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="30"/>
@@ -43,27 +47,31 @@
                     Grid.ColumnSpan="3"
                     Width="Auto"
                     Height="300"
-                    Margin="5 5 0 7"/>
+                    Margin="3 3 0 3"
+                    ItemsSource="{Binding Contacts}"/>
                 <Button
                     Grid.Row="2"
                     Grid.Column="0"
                     Width="75"
                     Height="25"
                     Margin="2"
+                    Command="{Binding Path = AddCommand}"
                     Content="Add"/>
                 <Button
                     Grid.Row="2"
                     Grid.Column="1"
                     Width="75"
                     Height="25"
-                    Content="Edit"/>
+                    Content="Edit"
+                    IsEnabled="{Binding Path = IsEnabled}"/>
                 <Button
                     Grid.Row="2"
                     Grid.Column="2"
                     Width="75"
                     Height="25"
                     Margin="2"
-                    Content="Remove"/>
+                    Content="Remove"
+                    IsEnabled="{Binding Path = IsEnabled}"/>
             </Grid>
         </GroupBox>
         <GridSplitter
@@ -91,23 +99,27 @@
                 <TextBox
                     Width="Auto"
                     Margin="3"
-                    IsReadOnly="True"/>
+                    Text="{Binding Name}"
+                    IsReadOnly="{Binding Path = ReadOnly}"/>
                 <TextBlock Margin="3" FontSize="12">Phone Number:</TextBlock>
                 <TextBox
                     Width="Auto"
                     Margin="3"
-                    IsReadOnly="True"/>
+                    IsReadOnly="{Binding Path = ReadOnly}"
+                    Text="{Binding Path=Number}"/>
                 <TextBlock Margin="3" FontSize="12">Email:</TextBlock>
                 <TextBox
                     Width="Auto"
                     Margin="3"
-                    IsReadOnly="True"/>
+                    IsReadOnly="{Binding Path = ReadOnly}"
+                    Text="{Binding Email, UpdateSourceTrigger=PropertyChanged}"/>
                 <Button
                     Width="75"
                     Height="25"
                     Margin="162 0"
                     Content="Apply"
-                    Visibility="Hidden"/>
+                    Command="{Binding SaveCommand}"
+                    Visibility="{Binding IsVisible, Converter={StaticResource Converter}}"/>
             </StackPanel>
         </Grid>
     </Grid>

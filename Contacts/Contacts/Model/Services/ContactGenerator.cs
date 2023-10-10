@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Contacts.Model.Services
 {
@@ -42,8 +38,8 @@ namespace Contacts.Model.Services
         /// <returns>Полное имя.</returns>
         private static string GenerateName()
         {
-            string _fullName = $"{_names[_random.Next(_names.Length)]} " +
-                $"{_surnames[_random.Next(_surnames.Length)]} " +
+            string _fullName = $"{_surnames[_random.Next(_surnames.Length)]} " +
+                $"{_names[_random.Next(_names.Length)]} " +
                 $"{_patronymic[_random.Next(_patronymic.Length)]}";
 
             return _fullName;
@@ -68,7 +64,7 @@ namespace Contacts.Model.Services
         /// <returns>Готовый Email.</returns>
         private static string GenerateEmail()
         {
-            string _email = $"{_names[_random.Next(_names.Length)]}+" +
+            string _email = $"{_names[_random.Next(_names.Length)]}" +
                 $"@{_domains[_random.Next(_domains.Length)]}";
 
             return _email;
