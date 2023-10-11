@@ -50,7 +50,8 @@
                     Height="Auto"
                     Margin="3"
                     ItemsSource="{Binding ContactsList, UpdateSourceTrigger=PropertyChanged}"
-                    SelectedItem="{Binding SelectedItem, UpdateSourceTrigger=PropertyChanged}"/>
+                    SelectedItem="{Binding SelectedItem, UpdateSourceTrigger=PropertyChanged}"
+                    DisplayMemberPath="Name"/>
                 <Button
                     Grid.Row="2"
                     Grid.Column="0"
