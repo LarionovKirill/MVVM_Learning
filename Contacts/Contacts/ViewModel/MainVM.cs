@@ -9,7 +9,6 @@ namespace Contacts.ViewModel
 {
     class MainVM : INotifyPropertyChanged
     {
-
         /// <summary>
         /// Поле обработчика команды сохранения.
         /// </summary>

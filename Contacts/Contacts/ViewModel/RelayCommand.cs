@@ -9,8 +9,16 @@ namespace Contacts.ViewModel
     public class RelayCommand : ICommand
     {
 
+        /// <summary>
+        /// Собитие происходит когда происходит изменение возможности выполнения события.
+        /// </summary>
         public event EventHandler CanExecuteChanged;
 
+        /// <summary>
+        /// Метод возвращается возмодность выполнения события.
+        /// </summary>
+        /// <param name="parameter">Параметр.</param>
+        /// <returns>True, если может выполниться, иначе false.</returns>
         public bool CanExecute(object parameter)
         {
             return true;
@@ -30,6 +38,10 @@ namespace Contacts.ViewModel
             this._action = execute;
         }
 
+        /// <summary>
+        /// Выполняет логику команды
+        /// </summary>
+        /// <param name="parameter">Параметр.</param>
         public void Execute(object parameter)
         {
             this._action(parameter);
