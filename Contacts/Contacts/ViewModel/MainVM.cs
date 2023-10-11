@@ -26,6 +26,11 @@ namespace Contacts.ViewModel
         private RelayCommand _applyCommand;
 
         /// <summary>
+        /// Поле обработчика команды добавления.
+        /// </summary>
+        private RelayCommand _editCommand;
+
+        /// <summary>
         /// Поле видимости.
         /// </summary>
         private bool _isVisible;
@@ -43,18 +48,41 @@ namespace Contacts.ViewModel
         /// <summary>
         /// Выбраный элемент
         /// </summary>
-        private Contact _selectedItem;
+        private Contact _selectedItem = new Contact();
 
         /// <summary>
-        /// Экземпляр контакта.
+        /// Поле списка контактов.
         /// </summary>
-        public Contact Contact { get; set; } = new Contact();
+        private ObservableCollection<Contact> _contactsList = ContactSerializer.LoadContact();
+
+        /// <summary>
+        /// Копия экземпляра контакта.
+        /// </summary>
+        public Contact CloneContact { get; set; }
+
+        /// <summary>
+        /// Флаг редактирования контакта.
+        /// </summary>
+        public bool EditMode { get; set; } = false;
+
+        public Contact NewContact { get; set; } = new Contact();
 
         /// <summary>
         /// Свойство массива контактов.
         /// </summary>
-        public ObservableCollection<Contact> Contacts { get; set; }
-            = ContactSerializer.LoadContact();
+        public ObservableCollection<Contact> ContactsList
+        {
+            get
+            {
+                return _contactsList;
+            }
+            set
+            {
+                _contactsList = value;
+                OnPropertyChanged(nameof(ContactsList));
+            }
+
+        }
 
         /// <summary>
         /// Возращает и задает имя контакта.
@@ -64,11 +92,11 @@ namespace Contacts.ViewModel
         {
             get
             {
-                return Contact.Name;
+                return SelectedItem.Name;
             }
             set
             {
-                Contact.Name = value;
+                SelectedItem.Name = value;
                 OnPropertyChanged(nameof(Name));
             }
         }
@@ -81,11 +109,11 @@ namespace Contacts.ViewModel
         {
             get
             {
-                return Contact.Number;
+                return SelectedItem.Number;
             }
             set
             {
-                Contact.Number = value;
+                SelectedItem.Number = value;
                 OnPropertyChanged(nameof(Number));
             }
         }
@@ -98,11 +126,11 @@ namespace Contacts.ViewModel
         {
             get
             {
-                return Contact.Email;
+                return SelectedItem.Email;
             }
             set
             {
-                Contact.Email = value;
+                SelectedItem.Email = value;
                 OnPropertyChanged(nameof(Email));
             }
         }
@@ -119,15 +147,21 @@ namespace Contacts.ViewModel
                     {
                         try
                         {
-                            ContactValidator.AssertEmail(Contact.Email);
-                            ContactValidator.AssertNumber(Contact.Number);
-                            ContactValidator.AssertName(Contact.Name);
-                            Contacts.Add(Contact);
-                            ContactSerializer.SaveContact(Contacts);
-                            MessageBox.Show("Данные успешно сохранены.");
-                            IsVisible = false;
-                            ReadOnly = true;
-                            IsEnabled = true;
+                            if (!EditMode)
+                            {
+                                ContactValidator.AssertContact(SelectedItem);
+                                ContactsList.Add(SelectedItem);
+                                ContactSerializer.SaveContact(ContactsList);
+                                MessageBox.Show("Данные успешно сохранены.");
+                            }
+                            else
+                            {
+                                var index = ContactsList.IndexOf(SelectedItem);
+
+                                ContactSerializer.SaveContact(ContactsList);
+                                MessageBox.Show("Данные успешно изменены.");
+                            }
+                            EditModeOff();
                         }
                         catch
                         {
@@ -148,12 +182,8 @@ namespace Contacts.ViewModel
                     (_addCommand = new RelayCommand(obj =>
                     {
                         var contact = ContactGenerator.GenerateContact();
-                        Name = contact.Name;
-                        Email = contact.Email;
-                        Number = contact.Number;
-                        IsVisible = true;
-                        IsEnabled = true;
-                        ReadOnly = false;
+                        SelectedItem = contact;
+                        ApplyMode();
                     }));
             }
         }
@@ -169,9 +199,7 @@ namespace Contacts.ViewModel
                 return _applyCommand ??
                     (_applyCommand = new RelayCommand(obj =>
                     {
-                        IsVisible = false;
-                        IsEnabled = true;
-                        ReadOnly = true;
+                        EditModeOff();
                     }));
             }
         }
@@ -186,26 +214,45 @@ namespace Contacts.ViewModel
                 return _applyCommand ??
                     (_applyCommand = new RelayCommand(obj =>
                     {
-                        var index = Contacts.IndexOf(SelectedItem);
-                        if (index == 0 && Contacts.Count == 1)
+                        var index = ContactsList.IndexOf(SelectedItem);
+                        if (index == 0 && ContactsList.Count == 1)
                         {
                             SelectedItem = null;
                         }
                         else if (index == 0)
                         {
-                            Contacts.RemoveAt(index);
-                            SelectedItem = Contacts[0];
+                            ContactsList.RemoveAt(index);
+                            SelectedItem = ContactsList[0];
                         }
-                        else if (index == Contacts.Count - 1)
+                        else if (index == ContactsList.Count - 1)
                         {
-                            Contacts.RemoveAt(index);
-                            SelectedItem = Contacts[index - 1];
+                            ContactsList.RemoveAt(index);
+                            SelectedItem = ContactsList[index - 1];
                         }
                         else
                         {
-                            Contacts.RemoveAt(index);
-                            SelectedItem = Contacts[index];
+                            ContactsList.RemoveAt(index);
+                            SelectedItem = ContactsList[index];
                         }
+                        ContactSerializer.SaveContact(ContactsList);
+                    }));
+            }
+        }
+
+        /// <summary>
+        /// Свойство автодобавления контакта для привязки его ко View.
+        /// </summary>
+        public RelayCommand EditCommand
+        {
+            get
+            {
+                return _editCommand ??
+                    (_editCommand = new RelayCommand(obj =>
+                    {
+                        EditModeOn();
+                        EditMode = true;
+                        CloneContact = SelectedItem;
+                        SelectedItem = (Contact)CloneContact.Clone();
                     }));
             }
         }
@@ -258,6 +305,9 @@ namespace Contacts.ViewModel
             }
         }
 
+        /// <summary>
+        /// Свойство для выбранного контакта
+        /// </summary>
         public Contact SelectedItem
         {
             get 
@@ -266,22 +316,21 @@ namespace Contacts.ViewModel
             }
             set
             {
-                _selectedItem = value;
+                if (CloneContact != null && _selectedItem != CloneContact)
+                {
+                    _selectedItem = CloneContact;
+                }
+                    _selectedItem = value;
                 if (_selectedItem != null)
                 {
                     Name = _selectedItem.Name;
                     Number = _selectedItem.Number;
                     Email = _selectedItem.Email;
+                    IsEnabled = true;
                 }
-                ActivateButtons();
                 OnPropertyChanged(nameof(SelectedItem));
             }
         }
-
-        /// <summary>
-        /// Событие срабатывает при изменении данных контакта.
-        /// </summary>
-        public event PropertyChangedEventHandler PropertyChanged;
 
         /// <summary>
         /// Метод вызывает событие PropertyChanged при изменении параметров контакта.
@@ -296,11 +345,46 @@ namespace Contacts.ViewModel
         /// <summary>
         /// Активирует кнопки и работу с текстом.
         /// </summary>
-        private void ActivateButtons()
+        private void ApplyMode()
         {
-            IsEnabled = true;
             IsVisible = true;
             ReadOnly = false;
         }
+
+        /// <summary>
+        /// Метод отключает кнопки(свойство IsEnabled), делает невидимым кнопку apply(IsVisible) 
+        /// и делает поля доступные только на чтение.
+        /// </summary>
+        private void EditModeOff()
+        {
+            IsVisible = false;
+            IsEnabled = true;
+            ReadOnly = true;
+            EditMode = false;
+        }
+
+        /// <summary>
+        /// Открывает поля для возможности редактирования.
+        /// </summary>
+        private void EditModeOn()
+        {
+            IsVisible = true;
+            ReadOnly = false;
+            EditMode = true;
+        }
+
+  /*      /// <summary>
+        /// Метод клонирования контакта.
+        /// </summary>
+        /// <returns>Копия объекта класса <see cref="Model.Contact"/>.</returns>
+        public object Clone()
+        {
+            return new Contact(Name, Number, Email);
+        }
+  */
+        /// <summary>
+        /// Событие срабатывает при изменении данных контакта.
+        /// </summary>
+        public event PropertyChangedEventHandler PropertyChanged;
     }
 }

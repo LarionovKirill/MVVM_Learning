@@ -3,9 +3,9 @@ using System.Globalization;
 using System.Windows;
 using System.Windows.Data;
 
-namespace Contacts.Model.Services
+namespace View
 {
-    class Converter : IValueConverter
+    internal class Converter : IValueConverter
     {
         /// <summary>
         /// Конвертирует bool значение в значение видимости.

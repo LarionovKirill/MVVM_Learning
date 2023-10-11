@@ -1,12 +1,14 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
 using System.Runtime.CompilerServices;
+
 
 namespace Contacts.Model
 {
     /// <summary>
     /// Класс контакта
     /// </summary>
-    public class Contact : INotifyPropertyChanged
+    public class Contact : INotifyPropertyChanged, ICloneable
     {
         /// <summary>
         /// Имя человека в контакте.
@@ -90,6 +92,15 @@ namespace Contacts.Model
             Name = _name;
             Number = _number;
             Email = _email;
+        }
+
+        /// <summary>
+        ///  Метод клонирования объекта типа <see cref="Contact"/>.
+        /// </summary>
+        /// <returns>Копия объекта.</returns>
+        public object Clone()
+        {
+            return new Contact(Name, Number, Email);
         }
 
         /// <summary>

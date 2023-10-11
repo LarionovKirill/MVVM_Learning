@@ -11,7 +11,7 @@ namespace Contacts.Model.Services
         /// Метод проверят, является ли имя контакта пустой строкой.
         /// </summary>
         /// <param name="name">Имя контакта.</param>
-        public static void AssertName(string name)
+        private static void AssertName(string name)
         {
             if (name.Length == 0)
             {
@@ -23,7 +23,7 @@ namespace Contacts.Model.Services
         /// Метод проверяет, является ли переданный номер 11 значным числом.
         /// </summary>
         /// <param name="number">Переданный номер.</param>
-        public static void AssertNumber(string number)
+        private static void AssertNumber(string number)
         {
             if (number.Length != 11)
             {
@@ -45,12 +45,23 @@ namespace Contacts.Model.Services
         /// Метод проверяет, является ли переданная строка адресом электронной почты.
         /// </summary>
         /// <param name="email">Переданный адрес.</param>
-        public static void AssertEmail(string email)
+        private static void AssertEmail(string email)
         {
             if (!email.Contains("@"))
             {
                 throw new ArgumentException();
             }
+        }
+
+        /// <summary>
+        /// Метод проверяет правильность заполнения контакта.
+        /// </summary>
+        /// <param name="contact"></param>
+        public static void AssertContact(Contact contact)
+        {
+            AssertEmail(contact.Email);
+            AssertNumber(contact.Number);
+            AssertName(contact.Name);
         }
     }
 }

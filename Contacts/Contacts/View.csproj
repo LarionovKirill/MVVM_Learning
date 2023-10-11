@@ -57,7 +57,7 @@
     </ApplicationDefinition>
     <Compile Include="Model\Services\ContactGenerator.cs" />
     <Compile Include="Model\Services\ContactSerializer.cs" />
-    <Compile Include="Model\Services\Converter.cs" />
+    <Compile Include="Converter.cs" />
     <Compile Include="ViewModel\LoadCommand.cs" />
     <Compile Include="ViewModel\MainVM.cs" />
     <Compile Include="ViewModel\RelayCommand.cs" />
@@ -104,9 +104,6 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="CommunityToolkit.Mvvm">
-      <Version>8.2.1</Version>
-    </PackageReference>
     <PackageReference Include="Newtonsoft.Json">
       <Version>13.0.3</Version>
     </PackageReference>
