@@ -13,7 +13,7 @@ namespace Contacts.ViewModel
         /// <summary>
         /// Поле обработчика команды сохранения.
         /// </summary>
-        private SaveCommand _saveCommand;
+        private RelayCommand _saveCommand;
 
         /// <summary>
         /// Поле обработчика команды добавления.
@@ -138,12 +138,12 @@ namespace Contacts.ViewModel
         /// <summary>
         /// Свойство команды сохранения.
         /// </summary>
-        public SaveCommand SaveCommand
+        public RelayCommand SaveCommand
         {
             get
             {
                 return _saveCommand ??
-                    (_saveCommand = new SaveCommand(obj =>
+                    (_saveCommand = new RelayCommand(obj =>
                     {
                         try
                         {
