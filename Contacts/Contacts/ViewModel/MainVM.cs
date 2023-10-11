@@ -46,6 +46,11 @@ namespace Contacts.ViewModel
         private bool _readOnly = true;
 
         /// <summary>
+        /// Индекс выбранного контакта.
+        /// </summary>
+        private int SelectedIndex { get; set; }
+
+        /// <summary>
         /// Выбраный элемент
         /// </summary>
         private Contact _selectedItem = new Contact();
@@ -58,14 +63,12 @@ namespace Contacts.ViewModel
         /// <summary>
         /// Копия экземпляра контакта.
         /// </summary>
-        public Contact CloneContact { get; set; }
+        public Contact CloneContact { get; set; } = new Contact();
 
         /// <summary>
         /// Флаг редактирования контакта.
         /// </summary>
         public bool EditMode { get; set; } = false;
-
-        public Contact NewContact { get; set; } = new Contact();
 
         /// <summary>
         /// Свойство массива контактов.
@@ -135,6 +138,83 @@ namespace Contacts.ViewModel
             }
         }
 
+
+        /// <summary>
+        /// Свойство видимости для привязки.
+        /// </summary>
+        public bool IsVisible
+        {
+            get
+            {
+                return _isVisible;
+            }
+            set
+            {
+                _isVisible = value;
+                OnPropertyChanged(nameof(IsVisible));
+            }
+        }
+
+        /// <summary>
+        /// Свойство видимости для привязки.
+        /// </summary>
+        public bool IsEnabled
+        {
+            get
+            {
+                return _isEnabled;
+            }
+            set
+            {
+                _isEnabled = value;
+                OnPropertyChanged(nameof(IsEnabled));
+            }
+        }
+
+        /// <summary>
+        /// Свойство видимости для привязки.
+        /// </summary>
+        public bool ReadOnly
+        {
+            get
+            {
+                return _readOnly;
+            }
+            set
+            {
+                _readOnly = value;
+                OnPropertyChanged(nameof(ReadOnly));
+            }
+        }
+
+        /// <summary>
+        /// Свойство для выбранного контакта
+        /// </summary>
+        public Contact SelectedItem
+        {
+            get
+            {
+                return _selectedItem;
+            }
+            set
+            {
+                _selectedItem = value;
+                if (_selectedItem != null)
+                {
+                    Name = _selectedItem.Name;
+                    Number = _selectedItem.Number;
+                    Email = _selectedItem.Email;
+                    IsEnabled = true;
+                }
+                if (EditMode)
+                {
+                    CloneContact = (Contact)_selectedItem.Clone();
+                    SelectedIndex = GetCurrentIndex(ContactsList, value);
+                }
+                OnPropertyChanged(nameof(SelectedItem));
+            }
+        }
+
         /// <summary>
         /// Свойство команды сохранения.
         /// </summary>
@@ -152,20 +232,23 @@ namespace Contacts.ViewModel
                                 ContactValidator.AssertContact(SelectedItem);
                                 ContactsList.Add(SelectedItem);
                                 ContactSerializer.SaveContact(ContactsList);
-                                MessageBox.Show("Данные успешно сохранены.");
+                                MessageBox.Show("Данные успешно сохранены.", "Сохранение",
+                                    MessageBoxButton.OK, MessageBoxImage.Information);
                             }
                             else
                             {
-                                var index = ContactsList.IndexOf(SelectedItem);
-
+                                EditMode = false;
+                                ContactsList[SelectedIndex] = SelectedItem;
                                 ContactSerializer.SaveContact(ContactsList);
-                                MessageBox.Show("Данные успешно изменены.");
+                                MessageBox.Show("Данные успешно изменены.", "Изменение",
+                                    MessageBoxButton.OK, MessageBoxImage.Information);
                             }
                             EditModeOff();
                         }
                         catch
                         {
-                            MessageBox.Show("Введите вверное значение.");
+                            MessageBox.Show("Введите вверное значение.","Сообщение об ошибке",
+                                MessageBoxButton.OK, MessageBoxImage.Error);
                         }
                     }));
             }
@@ -258,81 +341,6 @@ namespace Contacts.ViewModel
         }
 
         /// <summary>
-        /// Свойство видимости для привязки.
-        /// </summary>
-        public bool IsVisible
-        {
-            get
-            {
-                return _isVisible;
-            }
-            set
-            {
-                _isVisible = value;
-                OnPropertyChanged(nameof(IsVisible));
-            }
-        }
-
-        /// <summary>
-        /// Свойство видимости для привязки.
-        /// </summary>
-        public bool IsEnabled
-        {
-            get
-            {
-                return _isEnabled;
-            }
-            set
-            {
-                _isEnabled = value;
-                OnPropertyChanged(nameof(IsEnabled));
-            }
-        }
-
-        /// <summary>
-        /// Свойство видимости для привязки.
-        /// </summary>
-        public bool ReadOnly
-        {
-            get
-            {
-                return _readOnly;
-            }
-            set
-            {
-                _readOnly = value;
-                OnPropertyChanged(nameof(ReadOnly));
-            }
-        }
-
-        /// <summary>
-        /// Свойство для выбранного контакта
-        /// </summary>
-        public Contact SelectedItem
-        {
-            get 
-            { 
-                return _selectedItem; 
-            }
-            set
-            {
-                if (CloneContact != null && _selectedItem != CloneContact)
-                {
-                    _selectedItem = CloneContact;
-                }
-                    _selectedItem = value;
-                if (_selectedItem != null)
-                {
-                    Name = _selectedItem.Name;
-                    Number = _selectedItem.Number;
-                    Email = _selectedItem.Email;
-                    IsEnabled = true;
-                }
-                OnPropertyChanged(nameof(SelectedItem));
-            }
-        }
-
-        /// <summary>
         /// Метод вызывает событие PropertyChanged при изменении параметров контакта.
         /// </summary>
         /// <param name="prop"></param>
@@ -373,15 +381,38 @@ namespace Contacts.ViewModel
             EditMode = true;
         }
 
-  /*      /// <summary>
-        /// Метод клонирования контакта.
+        /// <summary>
+        /// Метод находит индекс в списке контактов.
         /// </summary>
-        /// <returns>Копия объекта класса <see cref="Model.Contact"/>.</returns>
-        public object Clone()
+        /// <param name="contactsList">Список контактов.</param>
+        /// <param name="findContact">Искомый контакт.</param>
+        /// <returns>Индекс в случае нахождения. В случае неудачи возвращается -1.</returns>
+        private int GetCurrentIndex(ObservableCollection<Contact> contactsList, Contact findContact)
         {
-            return new Contact(Name, Number, Email);
+            for(var index = 0; index< contactsList.Count;index++)
+            {
+                if (ContactEquals(contactsList[index], findContact))
+                {
+                    return index;
+                }
+            }
+            return -1;
         }
-  */
+
+        /// <summary>
+        /// Метод проверяет равенство двух контактов.
+        /// </summary>
+        /// <param name="contact1">Первый контакт.</param>
+        /// <param name="contact2">Второй контакт.</param>
+        /// <returns>True в случае равенства, иначе false.</returns>
+        private bool ContactEquals(Contact contact1, Contact contact2)
+        {
+            var emailEqual = contact1.Email == contact2.Email;
+            var phoneEqual = contact1.Number == contact2.Number;
+            var nameEqual = contact1.Name == contact2.Name;
+            return emailEqual && phoneEqual && nameEqual;
+        }
+
         /// <summary>
         /// Событие срабатывает при изменении данных контакта.
         /// </summary>
