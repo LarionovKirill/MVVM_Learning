@@ -4,9 +4,8 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:model="clr-namespace:Contacts.Model"
-    xmlns:viewmodel="clr-namespace:Contacts.ViewModel"
     xmlns:view="clr-namespace:View"
+    xmlns:viewmodel="clr-namespace:Contacts.ViewModel"
     Title="Contacts"
     MinWidth="800"
     MinHeight="450"
@@ -15,6 +14,27 @@
     mc:Ignorable="d">
     <Window.Resources>
         <view:Converter x:Key="Converter"/>
+        <DataTemplate x:Key="ContactTemplate">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Image 
+                    Grid.Column="0"
+                    Width="35"
+                    Height="35"
+                    Source="Images/EmptyProfile.png"/>
+                <StackPanel Grid.Column="1" Margin="3">
+                    <TextBlock
+                        FontSize="14"
+                        FontWeight="SemiBold"
+                        Text="{Binding Name}"/>
+                    <TextBlock FontSize="12" Text="{Binding Number}"/>
+                </StackPanel>
+            </Grid>
+        </DataTemplate>
+
     </Window.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
@@ -49,34 +69,34 @@
                     Width="Auto"
                     Height="Auto"
                     Margin="3"
+                    ItemTemplate="{StaticResource ContactTemplate}"
                     ItemsSource="{Binding ContactsList, UpdateSourceTrigger=PropertyChanged}"
-                    SelectedItem="{Binding SelectedItem, UpdateSourceTrigger=PropertyChanged}"
-                    DisplayMemberPath="Name"/>
+                    SelectedItem="{Binding SelectedItem, UpdateSourceTrigger=PropertyChanged}"/>
                 <Button
                     Grid.Row="2"
                     Grid.Column="0"
                     Width="75"
                     Height="25"
                     Margin="2"
-                    Command="{Binding Path = AddCommand, UpdateSourceTrigger=PropertyChanged}"
+                    Command="{Binding Path=AddCommand, UpdateSourceTrigger=PropertyChanged}"
                     Content="Add"/>
                 <Button
                     Grid.Row="2"
                     Grid.Column="1"
                     Width="75"
                     Height="25"
+                    Command="{Binding Path=EditCommand, UpdateSourceTrigger=PropertyChanged}"
                     Content="Edit"
-                    IsEnabled="{Binding Path = IsEnabled, UpdateSourceTrigger=PropertyChanged}"
-                    Command="{Binding Path = EditCommand, UpdateSourceTrigger=PropertyChanged}"/>
+                    IsEnabled="{Binding Path=IsEnabled, UpdateSourceTrigger=PropertyChanged}"/>
                 <Button
                     Grid.Row="2"
                     Grid.Column="2"
                     Width="75"
                     Height="25"
                     Margin="2"
-                    Content="Remove"
                     Command="{Binding DeleteCommand, UpdateSourceTrigger=PropertyChanged}"
-                    IsEnabled="{Binding Path = IsEnabled, UpdateSourceTrigger=PropertyChanged}"/>
+                    Content="Remove"
+                    IsEnabled="{Binding Path=IsEnabled, UpdateSourceTrigger=PropertyChanged}"/>
             </Grid>
         </GroupBox>
         <GridSplitter
@@ -104,26 +124,26 @@
                 <TextBox
                     Width="Auto"
                     Margin="3"
-                    Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"
-                    IsReadOnly="{Binding Path = ReadOnly, UpdateSourceTrigger=PropertyChanged}"/>
+                    IsReadOnly="{Binding Path=ReadOnly, UpdateSourceTrigger=PropertyChanged}"
+                    Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"/>
                 <TextBlock Margin="3" FontSize="12">Phone Number:</TextBlock>
                 <TextBox
                     Width="Auto"
                     Margin="3"
-                    IsReadOnly="{Binding Path = ReadOnly}"
+                    IsReadOnly="{Binding Path=ReadOnly}"
                     Text="{Binding Number, UpdateSourceTrigger=PropertyChanged}"/>
                 <TextBlock Margin="3" FontSize="12">Email:</TextBlock>
                 <TextBox
                     Width="Auto"
                     Margin="3"
-                    IsReadOnly="{Binding Path = ReadOnly, UpdateSourceTrigger=PropertyChanged}"
+                    IsReadOnly="{Binding Path=ReadOnly, UpdateSourceTrigger=PropertyChanged}"
                     Text="{Binding Email, UpdateSourceTrigger=PropertyChanged}"/>
                 <Button
                     Width="75"
                     Height="25"
                     Margin="162 0"
-                    Content="Apply"
                     Command="{Binding SaveCommand, UpdateSourceTrigger=PropertyChanged}"
+                    Content="Apply"
                     Visibility="{Binding IsVisible, Converter={StaticResource Converter}}"/>
             </StackPanel>
         </Grid>
