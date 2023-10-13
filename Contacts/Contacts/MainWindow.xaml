@@ -6,6 +6,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:view="clr-namespace:View"
     xmlns:viewmodel="clr-namespace:Contacts.ViewModel"
+    xmlns:uc="clr-namespace:Contacts.Controls"
     Title="Contacts"
     MinWidth="800"
     MinHeight="450"
