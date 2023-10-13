@@ -139,6 +139,7 @@
                     Margin="3"
                     IsReadOnly="{Binding Path=ReadOnly, UpdateSourceTrigger=PropertyChanged}"
                     Text="{Binding Email, UpdateSourceTrigger=PropertyChanged}"/>
+                <uc:ContactControl/>
                 <Button
                     Width="75"
                     Height="25"

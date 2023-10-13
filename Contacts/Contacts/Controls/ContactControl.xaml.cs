@@ -22,7 +22,7 @@ namespace Contacts.Controls
     {
         public ContactControl()
         {
-            //InitializeComponent();
+            InitializeComponent();
             DataContext = new MainVM();
         }
     }
