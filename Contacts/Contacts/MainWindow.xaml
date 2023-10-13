@@ -118,7 +118,7 @@
                 Margin="10 27 0 0"
                 HorizontalAlignment="Left"
                 VerticalAlignment="Top"
-                Source="Images/photo.jpg"/>
+                Source="Images/EmptyProfile.png"/>
             <StackPanel Grid.Column="1" Margin="0">
                 <TextBlock Margin="3" FontSize="12">Name:</TextBlock>
                 <TextBox
