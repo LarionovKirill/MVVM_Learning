@@ -13,7 +13,7 @@ namespace Contacts.Model.Services
         /// <param name="name">Имя контакта.</param>
         private static void AssertName(string name)
         {
-            if (name.Length == 0)
+            if (name.Length == 0 || name.Length>100)
             {
                 throw new ArgumentException();
             }
@@ -25,7 +25,8 @@ namespace Contacts.Model.Services
         /// <param name="number">Переданный номер.</param>
         private static void AssertNumber(string number)
         {
-            if (number.Length != 11)
+            var allowedCharacters = "0123456789 +-() .";
+            if (number.Length > 100)
             {
                 throw new ArgumentException();
             }
@@ -33,7 +34,7 @@ namespace Contacts.Model.Services
             {
                 foreach (var digit in number)
                 {
-                    if (!char.IsDigit(digit))
+                    if (!allowedCharacters.Contains(digit.ToString()))
                     {
                         throw new ArgumentException();
                     }
@@ -47,7 +48,7 @@ namespace Contacts.Model.Services
         /// <param name="email">Переданный адрес.</param>
         private static void AssertEmail(string email)
         {
-            if (!email.Contains("@"))
+            if (!email.Contains("@") || email.Length>100)
             {
                 throw new ArgumentException();
             }
