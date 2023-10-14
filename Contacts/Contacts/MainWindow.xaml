@@ -35,7 +35,6 @@
                 </StackPanel>
             </Grid>
         </DataTemplate>
-
     </Window.Resources>
     <Grid>
         <Grid.ColumnDefinitions>

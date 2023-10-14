@@ -57,10 +57,10 @@
     </ApplicationDefinition>
     <Compile Include="Model\Services\ContactGenerator.cs" />
     <Compile Include="Model\Services\ContactSerializer.cs" />
-    <Compile Include="Converter.cs" />
     <Compile Include="Controls\ContactControl.xaml.cs">
       <DependentUpon>ContactControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="VisibilityConverter.cs" />
     <Compile Include="ViewModel\MainVM.cs" />
     <Compile Include="ViewModel\RelayCommand.cs" />
     <Page Include="MainWindow.xaml">
