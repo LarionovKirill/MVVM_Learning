@@ -14,7 +14,7 @@
     SizeToContent="WidthAndHeight"
     mc:Ignorable="d">
     <Window.Resources>
-        <view:Converter x:Key="Converter"/>
+        <view:VisibilityConverter x:Key="Converter"/>
     </Window.Resources>
     <Grid>
         <Grid.ColumnDefinitions>

@@ -5,7 +5,10 @@ using System.Windows.Data;
 
 namespace View
 {
-    internal class Converter : IValueConverter
+    /// <summary>
+    /// Конвертр значения видимости атрибута.
+    /// </summary>
+    internal class VisibilityConverter : IValueConverter
     {
         /// <summary>
         /// Конвертирует bool значение в значение видимости.
@@ -39,11 +42,11 @@ namespace View
         {
             if ((Visibility)value == Visibility.Visible)
             {
-                return Visibility.Hidden;
+                return true;
             }
             else
             {
-                return Visibility.Visible;
+                return false;
             }
         }
     }
