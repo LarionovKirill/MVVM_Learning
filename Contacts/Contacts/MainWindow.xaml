@@ -14,7 +14,7 @@
     SizeToContent="WidthAndHeight"
     mc:Ignorable="d">
     <Window.Resources>
-        <view:Converter x:Key="Converter"/>
+        <view:VisibilityConverter x:Key="Converter"/>
         <DataTemplate x:Key="ContactTemplate">
             <Grid>
                 <Grid.ColumnDefinitions>
@@ -119,26 +119,8 @@
                 HorizontalAlignment="Left"
                 VerticalAlignment="Top"
                 Source="Images/EmptyProfile.png"/>
-            <StackPanel Grid.Column="1" Margin="0">
-                <TextBlock Margin="3" FontSize="12">Name:</TextBlock>
-                <TextBox
-                    Width="Auto"
-                    Margin="3"
-                    IsReadOnly="{Binding Path=ReadOnly, UpdateSourceTrigger=PropertyChanged}"
-                    Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"/>
-                <TextBlock Margin="3" FontSize="12">Phone Number:</TextBlock>
-                <TextBox
-                    Width="Auto"
-                    Margin="3"
-                    IsReadOnly="{Binding Path=ReadOnly}"
-                    Text="{Binding Number, UpdateSourceTrigger=PropertyChanged}"/>
-                <TextBlock Margin="3" FontSize="12">Email:</TextBlock>
-                <TextBox
-                    Width="Auto"
-                    Margin="3"
-                    IsReadOnly="{Binding Path=ReadOnly, UpdateSourceTrigger=PropertyChanged}"
-                    Text="{Binding Email, UpdateSourceTrigger=PropertyChanged}"/>
-                <uc:ContactControl/>
+            <StackPanel Grid.Column="1">
+                <uc:ContactControl Margin="5"/>
                 <Button
                     Width="75"
                     Height="25"

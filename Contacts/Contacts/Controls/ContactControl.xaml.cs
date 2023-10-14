@@ -23,7 +23,6 @@ namespace Contacts.Controls
         public ContactControl()
         {
             InitializeComponent();
-            DataContext = new MainVM();
         }
     }
 }
