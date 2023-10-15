@@ -16,19 +16,19 @@
                 Width="Auto"
                 Margin="3"
                 IsReadOnly="{Binding Path=ReadOnly, UpdateSourceTrigger=PropertyChanged}"
-                Text="{Binding Path=SelectedItem.Name, UpdateSourceTrigger=PropertyChanged}"/>
+                Text="{Binding Path=Name, ValidatesOnDataErrors=true, UpdateSourceTrigger=PropertyChanged}"/>
             <TextBlock Margin="3" FontSize="12">Phone Number:</TextBlock>
             <TextBox
                 Width="Auto"
                 Margin="3"
                 IsReadOnly="{Binding Path=ReadOnly}"
-                Text="{Binding Path=SelectedItem.Number, UpdateSourceTrigger=PropertyChanged}"/>
+                Text="{Binding Path=Number, ValidatesOnDataErrors=true, UpdateSourceTrigger=PropertyChanged}"/>
             <TextBlock Margin="3" FontSize="12">Email:</TextBlock>
             <TextBox
                 Width="Auto"
                 Margin="3"
                 IsReadOnly="{Binding Path=ReadOnly, UpdateSourceTrigger=PropertyChanged}"
-                Text="{Binding Path=SelectedItem.Email, UpdateSourceTrigger=PropertyChanged}"/>
+                Text="{Binding Path=Email, ValidatesOnDataErrors=true, UpdateSourceTrigger=PropertyChanged}"/>
         </StackPanel>
     </Grid>
 </UserControl>

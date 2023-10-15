@@ -1,4 +1,4 @@
-﻿using System;
+﻿
 
 namespace Contacts.Model.Services
 {
@@ -8,61 +8,73 @@ namespace Contacts.Model.Services
     public static class ContactValidator
     {
         /// <summary>
-        /// Метод проверят, является ли имя контакта пустой строкой.
+        /// Проверяет имя на правильность ввода.
         /// </summary>
-        /// <param name="name">Имя контакта.</param>
-        private static void AssertName(string name)
+        /// <param name="name">Переданное имя.</param>
+        /// <returns>Имя ошибки для отображения.</returns>
+        internal static string AssertName(string name)
         {
-            if (name.Length == 0 || name.Length>100)
+            if (name != null)
             {
-                throw new ArgumentException();
+                if (name.Length == 0)
+                {
+                    return "Name cannot be empty.";
+                }
+                else if (name.Length > 100)
+                {
+                    return "Name cannot be longer then 100 symbols";
+                }
             }
+            return null;
         }
 
         /// <summary>
-        /// Метод проверяет, является ли переданный номер 11 значным числом.
+        /// Проверяет номер на правильность ввода.
         /// </summary>
-        /// <param name="number">Переданный номер.</param>
-        private static void AssertNumber(string number)
+        /// <param name="number">Преданный номер.</param>
+        /// <returns>Имя ошибки для отображения.</returns>
+        internal static string AssertNumber(string number)
         {
-            var allowedCharacters = "0123456789 +-() .";
-            if (number.Length > 100)
+            if (number != null)
             {
-                throw new ArgumentException();
-            }
-            else
-            {
-                foreach (var digit in number)
+                var allowedCharacters = "0123456789 +-() .";
+                if (number.Length > 100)
                 {
-                    if (!allowedCharacters.Contains(digit.ToString()))
+                    return "Number cannot be longer then 100 symbols";
+                }
+                else
+                {
+                    foreach (var digit in number)
                     {
-                        throw new ArgumentException();
+                        if (!allowedCharacters.Contains(digit.ToString()))
+                        {
+                            return "Number can contain only [0123456789 +-() .]";
+                        }
                     }
                 }
             }
+            return null;
         }
 
         /// <summary>
-        /// Метод проверяет, является ли переданная строка адресом электронной почты.
+        /// Проверяет Email на правильность ввода.
         /// </summary>
-        /// <param name="email">Переданный адрес.</param>
-        private static void AssertEmail(string email)
+        /// <param name="email">Преданный email.</param>
+        /// <returns>Имя ошибки для отображения.</returns>
+        internal static string AssertEmail(string email)
         {
-            if (!email.Contains("@") || email.Length>100)
+            if (email != null)
             {
-                throw new ArgumentException();
+                if (!email.Contains("@"))
+                {
+                    return "Email must contain <@> ";
+                }
+                else if (email.Length > 100)
+                {
+                    return "Email cannot be longer then 100 symbols";
+                }
             }
-        }
-
-        /// <summary>
-        /// Метод проверяет правильность заполнения контакта.
-        /// </summary>
-        /// <param name="contact"></param>
-        public static void AssertContact(Contact contact)
-        {
-            AssertEmail(contact.Email);
-            AssertNumber(contact.Number);
-            AssertName(contact.Name);
+            return null;
         }
     }
 }

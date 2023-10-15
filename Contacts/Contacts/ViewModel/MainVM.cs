@@ -4,6 +4,7 @@ using System.Runtime.CompilerServices;
 using Contacts.Model;
 using Contacts.Model.Services;
 using System.Collections.ObjectModel;
+using System.Collections.Generic;
 
 namespace Contacts.ViewModel
 {
@@ -137,7 +138,6 @@ namespace Contacts.ViewModel
             }
         }
 
-
         /// <summary>
         /// Свойство видимости для привязки.
         /// </summary>
@@ -228,7 +228,6 @@ namespace Contacts.ViewModel
                         {
                             if (!EditMode)
                             {
-                                ContactValidator.AssertContact(SelectedItem);
                                 ContactsList.Add(SelectedItem);
                                 ContactSerializer.SaveContact(ContactsList);
                                 MessageBox.Show("Данные успешно сохранены.", "Сохранение",

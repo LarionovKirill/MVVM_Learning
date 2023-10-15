@@ -1,7 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
-using System.Runtime.CompilerServices;
-
 
 namespace Contacts.Model
 {
@@ -26,6 +25,13 @@ namespace Contacts.Model
         private string _email;
 
         /// <summary>
+        /// Словарь ошибок.
+        /// </summary>
+        public Dictionary<string, string> ErrorCollection { get; private set; }
+            = new Dictionary<string, string>();
+
+
+        /// <summary>
         /// Свойство имени в контакте пользователя.
         /// </summary>
         public string Name
@@ -37,7 +43,6 @@ namespace Contacts.Model
             set
             {
                 _name = value;
-                OnPropertyChanged(nameof(Name));
             }
         }
 
@@ -53,7 +58,6 @@ namespace Contacts.Model
             set
             {
                 _number = value;
-                OnPropertyChanged(nameof(Number));
             }
         }
         
@@ -69,7 +73,6 @@ namespace Contacts.Model
             set
             {
                 _email = value;
-                OnPropertyChanged(nameof(Email));
             }
         }
 
@@ -94,28 +97,11 @@ namespace Contacts.Model
             Email = _email;
         }
 
-        /// <summary>
-        ///  Метод клонирования объекта типа <see cref="Contact"/>.
-        /// </summary>
-        /// <returns>Копия объекта.</returns>
+        public event PropertyChangedEventHandler PropertyChanged;
+
         public object Clone()
         {
             return new Contact(Name, Number, Email);
-        }
-
-        /// <summary>
-        /// Событие срабатывает при изменении данных контакта.
-        /// </summary>
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        /// <summary>
-        /// Метод вызывает событие PropertyChanged при изменении параметров контакта.
-        /// </summary>
-        /// <param name="prop"></param>
-        public void OnPropertyChanged([CallerMemberName] string prop = "")
-        {
-            if (PropertyChanged != null)
-                PropertyChanged(this, new PropertyChangedEventArgs(prop));
         }
     }
 }
