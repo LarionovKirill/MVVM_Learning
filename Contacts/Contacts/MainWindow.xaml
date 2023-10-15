@@ -30,7 +30,7 @@
                     <TextBlock
                         FontSize="14"
                         FontWeight="SemiBold"
-                        Text="{Binding Path = SelectedItem.Name}"/>
+                        Text="{Binding Path = Name}"/>
                     <TextBlock FontSize="12" Text="{Binding Number}"/>
                 </StackPanel>
             </Grid>
