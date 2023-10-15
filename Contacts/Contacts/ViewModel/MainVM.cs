@@ -4,7 +4,6 @@ using System.Runtime.CompilerServices;
 using Contacts.Model;
 using Contacts.Model.Services;
 using System.Collections.ObjectModel;
-using System.Collections.Generic;
 
 namespace Contacts.ViewModel
 {
