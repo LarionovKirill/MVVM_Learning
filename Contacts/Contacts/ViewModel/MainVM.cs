@@ -329,10 +329,18 @@ namespace Contacts.ViewModel
                 return _editCommand ??
                     (_editCommand = new RelayCommand(obj =>
                     {
-                        EditModeOn();
-                        EditMode = true;
-                        CloneContact = SelectedItem;
-                        SelectedItem = (Contact)CloneContact.Clone();
+                        if (!EditMode)
+                        {
+                            EditModeOn();
+                            EditMode = true;
+                            CloneContact = SelectedItem;
+                            SelectedItem = (Contact)CloneContact.Clone();
+                        }
+                        else
+                        {
+                            EditMode = false;
+                            EditModeOff();
+                        }
                     }));
             }
         }
