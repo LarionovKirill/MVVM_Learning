@@ -35,7 +35,7 @@ namespace Contacts.ViewModel
         /// <summary>
         /// Словарь ошибок.
         /// </summary>
-        public Dictionary<string, string> _errorCollection = GenerateBaseDictianory();
+        private Dictionary<string, string> _errorCollection = GenerateBaseDictianory();
 
         /// <summary>
         /// Поле видимости.
