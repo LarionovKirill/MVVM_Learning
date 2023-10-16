@@ -152,22 +152,6 @@ namespace Contacts.ViewModel
             }
         }
 
-        private string _test;
-
-        public string Test
-        {
-            get
-            {
-                return _test;
-            }
-            set
-            {
-                _test = value;
-                OnPropertyChanged(nameof(Test));
-            }
-        }
-
-
         /// <summary>
         /// Свойство отображаемого имени.
         /// </summary>
@@ -326,6 +310,9 @@ namespace Contacts.ViewModel
             }
         }
 
+        /// <summary>
+        /// Свойство цвета Textbox имени.
+        /// </summary>
         public Brush NameColor
         {
             get
@@ -339,6 +326,9 @@ namespace Contacts.ViewModel
             }
         }
 
+        /// <summary>
+        /// Свойство цвета Textbox номера.
+        /// </summary>
         public Brush NumberColor
         {
             get
@@ -352,7 +342,9 @@ namespace Contacts.ViewModel
             }
         }
 
-
+        /// <summary>
+        /// Свойство цвета Textbox Email.
+        /// </summary>
         public Brush EmailColor
         {
             get
@@ -389,8 +381,8 @@ namespace Contacts.ViewModel
                             else
                             {
                                 EditMode = false;
-                                SelectedItem = (Contact)CloneContact.Clone();
                                 ContactsList[SelectedIndex] = CloneContact;
+                                SelectedItem = new Contact();
                                 ContactSerializer.SaveContact(ContactsList);
                                 MessageBox.Show("Данные успешно изменены.", "Изменение",
                                     MessageBoxButton.OK, MessageBoxImage.Information);

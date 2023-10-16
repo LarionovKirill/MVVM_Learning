@@ -26,7 +26,8 @@
                 Background="{Binding NumberColor}"
                 IsReadOnly="{Binding Path=ReadOnly}"
                 Text="{Binding Path=Number, ValidatesOnDataErrors=true, UpdateSourceTrigger=PropertyChanged}"
-                ToolTip="{Binding ErrorCollection[Number], UpdateSourceTrigger=PropertyChanged}"/>
+                ToolTip="{Binding ErrorCollection[Number], UpdateSourceTrigger=PropertyChanged}"
+                PreviewTextInput="TextBox_PreviewTextInput"/>
             <TextBlock Margin="3" FontSize="12">Email:</TextBlock>
             <TextBox
                 Width="Auto"
