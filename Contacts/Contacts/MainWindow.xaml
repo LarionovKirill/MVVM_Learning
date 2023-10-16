@@ -127,7 +127,8 @@
                     Margin="162 0"
                     Command="{Binding SaveCommand, UpdateSourceTrigger=PropertyChanged}"
                     Content="Apply"
-                    Visibility="{Binding IsVisible, Converter={StaticResource Converter}}"/>
+                    Visibility="{Binding IsVisible, Converter={StaticResource Converter}}"
+                    IsEnabled="{Binding IsEnabledButton}"/>
             </StackPanel>
         </Grid>
     </Grid>

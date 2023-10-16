@@ -42,6 +42,10 @@ namespace Contacts.Model.Services
                 {
                     return "Number cannot be longer then 100 symbols";
                 }
+                else if (number.Length == 0)
+                {
+                    return "Number cannot be empty";
+                }
                 else
                 {
                     foreach (var digit in number)
@@ -72,6 +76,10 @@ namespace Contacts.Model.Services
                 else if (email.Length > 100)
                 {
                     return "Email cannot be longer then 100 symbols";
+                }
+                else if (email.Length == 0)
+                {
+                    return "Email cannot be empty";
                 }
             }
             return null;
