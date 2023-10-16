@@ -24,11 +24,11 @@
                 Width="Auto"
                 Margin="3"
                 Background="{Binding NumberColor}"
+                DataObject.Pasting="TextBoxPaste"
                 IsReadOnly="{Binding Path=ReadOnly}"
-                Text="{Binding Path=Number, ValidatesOnDataErrors=true, UpdateSourceTrigger=PropertyChanged}"
-                ToolTip="{Binding ErrorCollection[Number], UpdateSourceTrigger=PropertyChanged}"
                 PreviewTextInput="TextBox_PreviewTextInput"
-                DataObject.Pasting="TextBoxPaste"/>
+                Text="{Binding Path=Number, ValidatesOnDataErrors=true, UpdateSourceTrigger=PropertyChanged}"
+                ToolTip="{Binding ErrorCollection[Number], UpdateSourceTrigger=PropertyChanged}"/>
             <TextBlock Margin="3" FontSize="12">Email:</TextBlock>
             <TextBox
                 Width="Auto"
