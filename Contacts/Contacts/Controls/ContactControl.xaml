@@ -27,7 +27,7 @@
                 DataObject.Pasting="TextBoxPaste"
                 IsReadOnly="{Binding Path=ReadOnly}"
                 PreviewTextInput="TextBox_PreviewTextInput"
-                Text="{Binding Path=Number, ValidatesOnDataErrors=true, UpdateSourceTrigger=PropertyChanged}"
+                Text="{Binding Number, ValidatesOnDataErrors=true, UpdateSourceTrigger=PropertyChanged}"
                 ToolTip="{Binding ErrorCollection[Number], UpdateSourceTrigger=PropertyChanged}"/>
             <TextBlock Margin="3" FontSize="12">Email:</TextBlock>
             <TextBox

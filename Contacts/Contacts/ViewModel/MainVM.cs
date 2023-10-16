@@ -6,10 +6,11 @@ using Contacts.Model.Services;
 using System.Collections.ObjectModel;
 using System.Windows.Media;
 using System.Collections.Generic;
+using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace Contacts.ViewModel
 {
-    class MainVM : INotifyPropertyChanged, IDataErrorInfo
+    class MainVM : ObservableObject, IDataErrorInfo
     {
         /// <summary>
         /// Поле обработчика команды сохранения.
@@ -123,8 +124,7 @@ namespace Contacts.ViewModel
             }
             set
             {
-                _errorCollection = value;
-                OnPropertyChanged("ErrorCollection");
+                SetProperty(ref _errorCollection, value);
             }
         }
 
@@ -139,7 +139,7 @@ namespace Contacts.ViewModel
             }
             set
             {
-                _selectedItem = value;
+                SetProperty(ref _selectedItem, value);
                 if (_selectedItem != null)
                 {
                     Name = SelectedItem.Name;
@@ -147,7 +147,7 @@ namespace Contacts.ViewModel
                     Email = SelectedItem.Email;
                     IsEnabled = true;
                     CloneContact = (Contact)SelectedItem.Clone();
-                    OnPropertyChanged(nameof(SelectedItem));
+                    SelectedIndex = GetCurrentIndex(ContactsList, CloneContact);
                 }
             }
         }
@@ -172,13 +172,15 @@ namespace Contacts.ViewModel
             {
                 if (!EditMode)
                 {
+                    var name = string.Empty;
+                    SetProperty(ref name, value);
                     SelectedItem.Name = value;
-                    OnPropertyChanged(nameof(Name));
                 }
                 else
                 {
+                    var name = string.Empty;
+                    SetProperty(ref name, value);
                     CloneContact.Name = value;
-                    OnPropertyChanged(nameof(Name));
                 }
             }
         }
@@ -203,13 +205,15 @@ namespace Contacts.ViewModel
             {
                 if (!EditMode)
                 {
+                    var number = string.Empty;
+                    SetProperty(ref number, value);
                     SelectedItem.Number = value;
-                    OnPropertyChanged(nameof(Number));
                 }
                 else
                 {
+                    var number = string.Empty;
+                    SetProperty(ref number, value);
                     CloneContact.Number = value;
-                    OnPropertyChanged(nameof(Number));
                 }
             }
         }
@@ -234,13 +238,15 @@ namespace Contacts.ViewModel
             {
                 if (!EditMode)
                 {
+                    var email = string.Empty;
+                    SetProperty(ref email, value);
                     SelectedItem.Email = value;
-                    OnPropertyChanged(nameof(Email));
                 }
                 else
                 {
+                    var email = string.Empty;
+                    SetProperty(ref email, value);
                     CloneContact.Email = value;
-                    OnPropertyChanged(nameof(Email));
                 }
             }
         }
@@ -257,8 +263,7 @@ namespace Contacts.ViewModel
             }
             set
             {
-                _isVisible = value;
-                OnPropertyChanged(nameof(IsVisible));
+                SetProperty(ref _isVisible, value);
             }
         }
 
@@ -273,8 +278,7 @@ namespace Contacts.ViewModel
             }
             set
             {
-                _isEnabledButton = value;
-                OnPropertyChanged("IsEnabledButton");
+                SetProperty(ref _isEnabledButton, value);
             }
         }
 
@@ -289,8 +293,7 @@ namespace Contacts.ViewModel
             }
             set
             {
-                _isEnabled = value;
-                OnPropertyChanged(nameof(IsEnabled));
+                SetProperty(ref _isEnabled, value);
             }
         }
 
@@ -305,8 +308,7 @@ namespace Contacts.ViewModel
             }
             set
             {
-                _readOnly = value;
-                OnPropertyChanged(nameof(ReadOnly));
+                SetProperty(ref _readOnly, value);
             }
         }
 
@@ -321,8 +323,7 @@ namespace Contacts.ViewModel
             }
             set
             {
-                _nameColor = value;
-                OnPropertyChanged(nameof(NameColor));
+                SetProperty(ref _nameColor, value);
             }
         }
 
@@ -337,8 +338,7 @@ namespace Contacts.ViewModel
             }
             set
             {
-                _numberColor = value;
-                OnPropertyChanged(nameof(NumberColor));
+                SetProperty(ref _numberColor, value);
             }
         }
 
@@ -353,8 +353,7 @@ namespace Contacts.ViewModel
             }
             set
             {
-                _emailColor = value;
-                OnPropertyChanged(nameof(EmailColor));
+                SetProperty(ref _emailColor, value);
             }
         }
 
@@ -375,6 +374,7 @@ namespace Contacts.ViewModel
                             {
                                 ContactsList.Add(SelectedItem);
                                 ContactSerializer.SaveContact(ContactsList);
+                                SelectedIndex = GetCurrentIndex(ContactsList, SelectedItem);
                                 MessageBox.Show("Данные успешно сохранены.", "Сохранение",
                                     MessageBoxButton.OK, MessageBoxImage.Information);
                             }
@@ -382,7 +382,7 @@ namespace Contacts.ViewModel
                             {
                                 EditMode = false;
                                 ContactsList[SelectedIndex] = CloneContact;
-                                SelectedItem = new Contact();
+                                SelectedItem = CloneContact;
                                 ContactSerializer.SaveContact(ContactsList);
                                 MessageBox.Show("Данные успешно изменены.", "Изменение",
                                     MessageBoxButton.OK, MessageBoxImage.Information);
@@ -569,16 +569,6 @@ namespace Contacts.ViewModel
         }
 
         /// <summary>
-        /// Метод вызывает событие PropertyChanged при изменении параметров контакта.
-        /// </summary>
-        /// <param name="prop"></param>
-        public void OnPropertyChanged([CallerMemberName] string prop = "")
-        {
-            if (PropertyChanged != null)
-                PropertyChanged(this, new PropertyChangedEventArgs(prop));
-        }
-
-        /// <summary>
         /// Активирует кнопки и работу с текстом.
         /// </summary>
         private void ApplyMode()
@@ -653,10 +643,5 @@ namespace Contacts.ViewModel
             var nameEqual = contact1.Name == contact2.Name;
             return emailEqual && phoneEqual && nameEqual;
         }
-
-        /// <summary>
-        /// Событие срабатывает при изменении данных контакта.
-        /// </summary>
-        public event PropertyChangedEventHandler PropertyChanged;
     }
 }
