@@ -1,36 +1,51 @@
 ﻿using System.ComponentModel;
 using System.Windows;
-using System.Runtime.CompilerServices;
 using Contacts.Model;
+using System.Windows.Input;
 using Contacts.Model.Services;
 using System.Collections.ObjectModel;
 using System.Windows.Media;
 using System.Collections.Generic;
 using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 
 namespace Contacts.ViewModel
 {
-    class MainVM : ObservableObject, IDataErrorInfo
+    public class MainVM : ObservableObject, IDataErrorInfo
     {
+        public MainVM()
+        {
+            saveCommand = new RelayCommand(SaveCommand);
+            addCommand = new RelayCommand(AddCommand);
+            applyCommand = new RelayCommand(ApplyCommand);
+            editCommand = new RelayCommand(EditCommand);
+            deleteCommand = new RelayCommand(DeleteCommand);
+        }
+
         /// <summary>
         /// Поле обработчика команды сохранения.
         /// </summary>
-        private RelayCommand _saveCommand;
+        public ICommand saveCommand { get; }
 
         /// <summary>
         /// Поле обработчика команды добавления.
         /// </summary>
-        private RelayCommand _addCommand;
+        public ICommand addCommand { get; }
 
         /// <summary>
         /// Поле обработчика команды добавления.
         /// </summary>
-        private RelayCommand _applyCommand;
+        public ICommand applyCommand { get; }
 
         /// <summary>
         /// Поле обработчика команды добавления.
         /// </summary>
-        private RelayCommand _editCommand;
+        public ICommand editCommand { get; }
+
+        /// <summary>
+        /// Поле обработчика команды добавления.
+        /// </summary>
+        public ICommand deleteCommand { get; }
 
         /// <summary>
         /// Словарь ошибок.
@@ -175,12 +190,13 @@ namespace Contacts.ViewModel
                     var name = string.Empty;
                     SetProperty(ref name, value);
                     SelectedItem.Name = value;
+                    CloneContact.Name = value;
                 }
                 else
                 {
                     var name = string.Empty;
-                    SetProperty(ref name, value);
                     CloneContact.Name = value;
+                    SetProperty(ref name, value);
                 }
             }
         }
@@ -212,8 +228,8 @@ namespace Contacts.ViewModel
                 else
                 {
                     var number = string.Empty;
-                    SetProperty(ref number, value);
                     CloneContact.Number = value;
+                    SetProperty(ref number, value);
                 }
             }
         }
@@ -245,8 +261,8 @@ namespace Contacts.ViewModel
                 else
                 {
                     var email = string.Empty;
-                    SetProperty(ref email, value);
                     CloneContact.Email = value;
+                    SetProperty(ref email, value);
                 }
             }
         }
@@ -361,133 +377,98 @@ namespace Contacts.ViewModel
         /// <summary>
         /// Свойство команды сохранения.
         /// </summary>
-        public RelayCommand SaveCommand
+        public void SaveCommand()
         {
-            get
+            try
             {
-                return _saveCommand ??
-                    (_saveCommand = new RelayCommand(obj =>
-                    {
-                        try
-                        {
-                            if (!EditMode)
-                            {
-                                ContactsList.Add(SelectedItem);
-                                ContactSerializer.SaveContact(ContactsList);
-                                SelectedIndex = GetCurrentIndex(ContactsList, SelectedItem);
-                                MessageBox.Show("Данные успешно сохранены.", "Сохранение",
-                                    MessageBoxButton.OK, MessageBoxImage.Information);
-                            }
-                            else
-                            {
-                                EditMode = false;
-                                ContactsList[SelectedIndex] = CloneContact;
-                                SelectedItem = CloneContact;
-                                ContactSerializer.SaveContact(ContactsList);
-                                MessageBox.Show("Данные успешно изменены.", "Изменение",
-                                    MessageBoxButton.OK, MessageBoxImage.Information);
-                            }
-                            EditModeOff();
-                        }
-                        catch
-                        {
-                            MessageBox.Show("Введите вверное значение.","Сообщение об ошибке",
-                                MessageBoxButton.OK, MessageBoxImage.Error);
-                        }
-                    }));
+                if (!EditMode)
+                {
+                    ContactsList.Add(SelectedItem);
+                    ContactSerializer.SaveContact(ContactsList);
+                    SelectedIndex = GetCurrentIndex(ContactsList, SelectedItem);
+                    MessageBox.Show("Данные успешно сохранены.", "Сохранение",
+                        MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+                else
+                {
+                    EditMode = false;
+                    ContactsList[SelectedIndex] = CloneContact;
+                    SelectedItem = CloneContact;
+                    ContactSerializer.SaveContact(ContactsList);
+                    MessageBox.Show("Данные успешно изменены.", "Изменение",
+                        MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+                EditModeOff();
+            }
+            catch
+            {
+                MessageBox.Show("Введите вверное значение.", "Сообщение об ошибке",
+                    MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
         /// <summary>
         /// Свойство автодобавления контакта для привязки его ко View.
         /// </summary>
-        public RelayCommand AddCommand
+        public void AddCommand()
         {
-            get
-            {
-                return _addCommand ??
-                    (_addCommand = new RelayCommand(obj =>
-                    {
-                        var contact = ContactGenerator.GenerateContact();
-                        SelectedItem = contact;
-                        ApplyMode();
-                    }));
-            }
+            var contact = ContactGenerator.GenerateContact();
+            SelectedItem = contact;
+            ApplyMode();
         }
 
 
         /// <summary>
         /// Свойство подтверждения контакта для привязки его ко View.
         /// </summary>
-        public RelayCommand ApplyCommand
+        public void ApplyCommand()
         {
-            get
-            {
-                return _applyCommand ??
-                    (_applyCommand = new RelayCommand(obj =>
-                    {
-                        EditModeOff();
-                    }));
-            }
+            EditModeOff();
         }
 
         /// <summary>
         /// Свойство подтверждения контакта для привязки его ко View.
         /// </summary>
-        public RelayCommand DeleteCommand
+        public void DeleteCommand()
         {
-            get
+            var index = ContactsList.IndexOf(SelectedItem);
+            if (index == 0 && ContactsList.Count == 1)
             {
-                return _applyCommand ??
-                    (_applyCommand = new RelayCommand(obj =>
-                    {
-                        var index = ContactsList.IndexOf(SelectedItem);
-                        if (index == 0 && ContactsList.Count == 1)
-                        {
-                            SelectedItem = null;
-                        }
-                        else if (index == 0)
-                        {
-                            ContactsList.RemoveAt(index);
-                            SelectedItem = ContactsList[0];
-                        }
-                        else if (index == ContactsList.Count - 1)
-                        {
-                            ContactsList.RemoveAt(index);
-                            SelectedItem = ContactsList[index - 1];
-                        }
-                        else
-                        {
-                            ContactsList.RemoveAt(index);
-                            SelectedItem = ContactsList[index];
-                        }
-                        ContactSerializer.SaveContact(ContactsList);
-                    }));
+                SelectedItem = null;
             }
+            else if (index == 0)
+            {
+                ContactsList.RemoveAt(index);
+                SelectedItem = ContactsList[0];
+            }
+            else if (index == ContactsList.Count - 1)
+            {
+                ContactsList.RemoveAt(index);
+                SelectedItem = ContactsList[index - 1];
+            }
+            else
+            {
+                ContactsList.RemoveAt(index);
+                SelectedItem = ContactsList[index];
+            }
+            ContactSerializer.SaveContact(ContactsList);
         }
 
         /// <summary>
         /// Свойство автодобавления контакта для привязки его ко View.
         /// </summary>
-        public RelayCommand EditCommand
+        public void EditCommand()
         {
-            get
+            if (!EditMode)
             {
-                return _editCommand ??
-                    (_editCommand = new RelayCommand(obj =>
-                    {
-                        if (!EditMode)
-                        {
-                            EditModeOn();
-                            EditMode = true;
-                            CloneContact = (Contact)SelectedItem.Clone();
-                        }
-                        else
-                        {
-                            EditMode = false;
-                            EditModeOff();
-                        }
-                    }));
+                EditModeOn();
+                EditMode = true;
+                CloneContact = (Contact)SelectedItem.Clone();
+            }
+            else
+            {
+                EditMode = false;
+                EditModeOff();
             }
         }
         /// <summary>

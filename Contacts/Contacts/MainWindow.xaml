@@ -78,14 +78,14 @@
                     Width="75"
                     Height="25"
                     Margin="2"
-                    Command="{Binding Path=AddCommand, UpdateSourceTrigger=PropertyChanged}"
+                    Command="{Binding Path=addCommand, UpdateSourceTrigger=PropertyChanged}"
                     Content="Add"/>
                 <Button
                     Grid.Row="2"
                     Grid.Column="1"
                     Width="75"
                     Height="25"
-                    Command="{Binding Path=EditCommand, UpdateSourceTrigger=PropertyChanged}"
+                    Command="{Binding Path=editCommand, UpdateSourceTrigger=PropertyChanged}"
                     Content="Edit"
                     IsEnabled="{Binding Path=IsEnabled, UpdateSourceTrigger=PropertyChanged}"/>
                 <Button
@@ -94,7 +94,7 @@
                     Width="75"
                     Height="25"
                     Margin="2"
-                    Command="{Binding DeleteCommand, UpdateSourceTrigger=PropertyChanged}"
+                    Command="{Binding deleteCommand, UpdateSourceTrigger=PropertyChanged}"
                     Content="Remove"
                     IsEnabled="{Binding Path=IsEnabled, UpdateSourceTrigger=PropertyChanged}"/>
             </Grid>
@@ -125,7 +125,7 @@
                     Width="75"
                     Height="25"
                     Margin="162 0"
-                    Command="{Binding SaveCommand, UpdateSourceTrigger=PropertyChanged}"
+                    Command="{Binding saveCommand, UpdateSourceTrigger=PropertyChanged}"
                     Content="Apply"
                     Visibility="{Binding IsVisible, Converter={StaticResource Converter}}"
                     IsEnabled="{Binding IsEnabledButton}"/>
