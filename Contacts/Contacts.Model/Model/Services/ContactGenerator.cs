@@ -5,7 +5,7 @@ namespace Contacts.Model.Services
     /// <summary>
     /// Класс для создания случайных контактов.
     /// </summary>
-    static internal class ContactGenerator
+    static public class ContactGenerator
     {
         /// <summary>
         /// Список имен для генерации.

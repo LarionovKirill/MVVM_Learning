@@ -4,10 +4,11 @@ using Contacts.Model;
 using System.Windows.Input;
 using Contacts.Model.Services;
 using System.Collections.ObjectModel;
-using System.Windows.Media;
 using System.Collections.Generic;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using System.Windows.Media;
+using Contacts.Model.Services;
 
 namespace Contacts.ViewModel
 {

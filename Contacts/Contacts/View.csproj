@@ -55,13 +55,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Model\Services\ContactGenerator.cs" />
-    <Compile Include="Model\Services\ContactSerializer.cs" />
     <Compile Include="Controls\ContactControl.xaml.cs">
       <DependentUpon>ContactControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="VisibilityConverter.cs" />
-    <Compile Include="ViewModel\MainVM.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -80,8 +77,6 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Model\Contact.cs" />
-    <Compile Include="Model\Services\ContactValidator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -108,19 +103,16 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="CommunityToolkit.Mvvm">
-      <Version>8.2.1</Version>
-    </PackageReference>
-    <PackageReference Include="Newtonsoft.Json">
-      <Version>13.0.3</Version>
-    </PackageReference>
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="Images\photo.jpg" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\EmptyProfile.png" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\Contacts.ViewModel\Contacts.ViewModel.csproj">
+      <Project>{20fc1dd5-1b70-49db-b43e-1eb64b5d1002}</Project>
+      <Name>Contacts.ViewModel</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
