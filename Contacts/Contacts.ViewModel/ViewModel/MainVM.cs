@@ -7,12 +7,18 @@ using System.Collections.ObjectModel;
 using System.Collections.Generic;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using System.Windows.Media;
+using Contacts.Model.Model.Services;
 
 namespace Contacts.ViewModel
 {
+    /// <summary>
+    /// Класс ViewModel
+    /// </summary>
     public class MainVM : ObservableObject, IDataErrorInfo
     {
+        /// <summary>
+        /// Конструктор класса <see cref="MainVM"/>.
+        /// </summary>
         public MainVM()
         {
             SaveCommand = new RelayCommand(SaveContactCommand);
@@ -50,7 +56,7 @@ namespace Contacts.ViewModel
         /// <summary>
         /// Словарь ошибок.
         /// </summary>
-        private Dictionary<string, string> _errorCollection = GenerateBaseDictianory();
+        private Dictionary<string, string> _errorCollection = VMServis.GenerateBaseDictianory();
 
         /// <summary>
         /// Поле видимости.
@@ -147,7 +153,7 @@ namespace Contacts.ViewModel
                     Email = SelectedItem.Email;
                     IsEnabled = true;
                     CloneContact = (Contact)SelectedItem.Clone();
-                    SelectedIndex = GetCurrentIndex(ContactsList, CloneContact);
+                    SelectedIndex = VMServis.GetCurrentIndex(ContactsList, CloneContact);
                 }
             }
         }
@@ -324,7 +330,7 @@ namespace Contacts.ViewModel
                 {
                     ContactsList.Add(SelectedItem);
                     ContactSerializer.SaveContact(ContactsList);
-                    SelectedIndex = GetCurrentIndex(ContactsList, SelectedItem);
+                    SelectedIndex = VMServis.GetCurrentIndex(ContactsList, SelectedItem);
                     MessageBox.Show("Данные успешно сохранены.", "Сохранение",
                         MessageBoxButton.OK, MessageBoxImage.Information);
                 }
@@ -493,51 +499,6 @@ namespace Contacts.ViewModel
             IsVisible = true;
             ReadOnly = false;
             EditMode = true;
-        }
-
-        /// <summary>
-        /// Метод находит индекс в списке контактов.
-        /// </summary>
-        /// <param name="contactsList">Список контактов.</param>
-        /// <param name="findContact">Искомый контакт.</param>
-        /// <returns>Индекс в случае нахождения. В случае неудачи возвращается -1.</returns>
-        private int GetCurrentIndex(ObservableCollection<Contact> contactsList, Contact findContact)
-        {
-            for(var index = 0; index< contactsList.Count;index++)
-            {
-                if (ContactEquals(contactsList[index], findContact))
-                {
-                    return index;
-                }
-            }
-            return -1;
-        }
-
-        /// <summary>
-        /// Метод создает базовый словарь для ошибок.
-        /// </summary>
-        /// <returns>Словарь для ошибок.</returns>
-        static private Dictionary<string, string> GenerateBaseDictianory()
-        {
-            var dict = new Dictionary<string, string>();
-            dict.Add("Name", "The data is correct");
-            dict.Add("Number", "The data is correct");
-            dict.Add("Email", "The data is correct");
-            return dict;
-        }
-
-        /// <summary>
-        /// Метод проверяет равенство двух контактов.
-        /// </summary>
-        /// <param name="contact1">Первый контакт.</param>
-        /// <param name="contact2">Второй контакт.</param>
-        /// <returns>True в случае равенства, иначе false.</returns>
-        private bool ContactEquals(Contact contact1, Contact contact2)
-        {
-            var emailEqual = contact1.Email == contact2.Email;
-            var phoneEqual = contact1.Number == contact2.Number;
-            var nameEqual = contact1.Name == contact2.Name;
-            return emailEqual && phoneEqual && nameEqual;
         }
     }
 }

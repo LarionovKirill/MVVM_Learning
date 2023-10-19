@@ -48,6 +48,7 @@
     <Compile Include="Model\Services\ContactGenerator.cs" />
     <Compile Include="Model\Services\ContactSerializer.cs" />
     <Compile Include="Model\Services\ContactValidator.cs" />
+    <Compile Include="Model\Services\VMServis.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
