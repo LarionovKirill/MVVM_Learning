@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using Newtonsoft.Json;
+using System.Collections.ObjectModel;
 
 namespace Contacts.Model.Services
 {
@@ -24,10 +25,10 @@ namespace Contacts.Model.Services
         /// <summary>
         /// Метод серилиазует контакт в json файл.
         /// </summary>
-        /// <param name="contact">Переданный контакт.</param>
-        public static void SaveContact(Contact contact)
+        /// <param name="contacts">Переданный список контактов.</param>
+        public static void SaveContact(ObservableCollection<Contact> contacts)
         {
-            var json = JsonConvert.SerializeObject(contact, Formatting.Indented);
+            var json = JsonConvert.SerializeObject(contacts, Formatting.Indented);
             File.WriteAllText(DefaultPath, json);
         }
 
@@ -35,17 +36,17 @@ namespace Contacts.Model.Services
         /// Метод осуществялет загрузку контакта из Json-файла.
         /// </summary>
         /// <returns>Записанный контакт.</returns>
-        public static Contact LoadContact()
+        public static ObservableCollection<Contact> LoadContact()
         {
-            var contact = new Contact();
+            var data = new ObservableCollection<Contact>();
 
             if (File.Exists(DefaultPath))
             {
                 var jsonContent = File.ReadAllText(DefaultPath);
-                contact = JsonConvert.DeserializeObject<Contact>(jsonContent);
+                data = JsonConvert.DeserializeObject<ObservableCollection<Contact>>(jsonContent);
             }
 
-            return contact;
+            return data;
         }
     }
 }
