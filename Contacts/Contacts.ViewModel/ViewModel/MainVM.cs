@@ -378,7 +378,7 @@ namespace Contacts.ViewModel
         /// <summary>
         /// Свойство команды сохранения.
         /// </summary>
-        public void SaveContactCommand()
+        private void SaveContactCommand()
         {
             try
             {
@@ -411,7 +411,7 @@ namespace Contacts.ViewModel
         /// <summary>
         /// Свойство автодобавления контакта для привязки его ко View.
         /// </summary>
-        public void AddContactCommand()
+        private void AddContactCommand()
         {
             var contact = ContactGenerator.GenerateContact();
             SelectedItem = contact;
@@ -422,7 +422,7 @@ namespace Contacts.ViewModel
         /// <summary>
         /// Свойство подтверждения контакта для привязки его ко View.
         /// </summary>
-        public void ApplyContactCommand()
+        private void ApplyContactCommand()
         {
             EditModeOff();
         }
@@ -430,7 +430,7 @@ namespace Contacts.ViewModel
         /// <summary>
         /// Свойство подтверждения контакта для привязки его ко View.
         /// </summary>
-        public void DeleteContactCommand()
+        private void DeleteContactCommand()
         {
             var index = ContactsList.IndexOf(SelectedItem);
             if (index == 0 && ContactsList.Count == 1)
@@ -458,7 +458,7 @@ namespace Contacts.ViewModel
         /// <summary>
         /// Свойство автодобавления контакта для привязки его ко View.
         /// </summary>
-        public void EditContactCommand()
+        private void EditContactCommand()
         {
             if (!EditMode)
             {
