@@ -93,21 +93,6 @@ namespace Contacts.ViewModel
         public bool EditMode { get; set; } = false;
 
         /// <summary>
-        /// Свойство цвета фона имени.
-        /// </summary>
-        private Brush _nameColor;
-
-        /// <summary>
-        /// Свойство цвета фона Email.
-        /// </summary>
-        private Brush _emailColor;
-
-        /// <summary>
-        /// Свойство цвета фона номера.
-        /// </summary>
-        private Brush _numberColor;
-
-        /// <summary>
         /// Свойство работы кнопки.
         /// </summary>
         private bool _isEnabledButton = true;
@@ -329,52 +314,6 @@ namespace Contacts.ViewModel
         }
 
         /// <summary>
-        /// Свойство цвета Textbox имени.
-        /// </summary>
-        public Brush NameColor
-        {
-            get
-            {
-                return _nameColor;
-            }
-            set
-            {
-                SetProperty(ref _nameColor, value);
-            }
-        }
-
-        /// <summary>
-        /// Свойство цвета Textbox номера.
-        /// </summary>
-        public Brush NumberColor
-        {
-            get
-            {
-                return _numberColor;
-            }
-            set
-            {
-                SetProperty(ref _numberColor, value);
-            }
-        }
-
-        /// <summary>
-        /// Свойство цвета Textbox Email.
-        /// </summary>
-        public Brush EmailColor
-        {
-            get
-            {
-                return _emailColor;
-            }
-            set
-            {
-                SetProperty(ref _emailColor, value);
-            }
-        }
-
-
-        /// <summary>
         /// Свойство команды сохранения.
         /// </summary>
         private void SaveContactCommand()
@@ -496,36 +435,12 @@ namespace Contacts.ViewModel
                 {
                     case "Name":
                         result = ContactValidator.AssertName(Name);
-                        if (result != null)
-                        {
-                            NameColor = Brushes.Salmon;
-                        }
-                        else
-                        {
-                            NameColor = Brushes.White;
-                        }
                         break;
                     case "Number":
                         result = ContactValidator.AssertNumber(Number);
-                        if (result != null)
-                        {
-                            NumberColor = Brushes.Salmon;
-                        }
-                        else
-                        {
-                            NumberColor = Brushes.White;
-                        }
                         break;
                     case "Email":
                         result = ContactValidator.AssertEmail(Email);
-                        if (result != null)
-                        {
-                            EmailColor = Brushes.Salmon;
-                        }
-                        else
-                        {
-                            EmailColor = Brushes.White;
-                        }
                         break;
                 }
                 if (ErrorCollection.ContainsKey(name) && result != null)
