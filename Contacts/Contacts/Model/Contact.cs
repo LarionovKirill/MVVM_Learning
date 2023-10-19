@@ -1,7 +1,6 @@
-﻿using System;
-using System.ComponentModel;
+﻿using System.ComponentModel;
+using System;
 using System.Runtime.CompilerServices;
-
 
 namespace Contacts.Model
 {
@@ -94,18 +93,6 @@ namespace Contacts.Model
             Email = _email;
         }
 
-        /// <summary>
-        ///  Метод клонирования объекта типа <see cref="Contact"/>.
-        /// </summary>
-        /// <returns>Копия объекта.</returns>
-        public object Clone()
-        {
-            return new Contact(Name, Number, Email);
-        }
-
-        /// <summary>
-        /// Событие срабатывает при изменении данных контакта.
-        /// </summary>
         public event PropertyChangedEventHandler PropertyChanged;
 
         /// <summary>
@@ -116,6 +103,15 @@ namespace Contacts.Model
         {
             if (PropertyChanged != null)
                 PropertyChanged(this, new PropertyChangedEventArgs(prop));
+        }
+
+        /// <summary>
+        /// Создает копию класса Contact.
+        /// </summary>
+        /// <returns>Копия класса.</returns>
+        public object Clone()
+        {
+            return new Contact(Name, Number, Email);
         }
     }
 }

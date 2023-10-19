@@ -4,10 +4,12 @@ using System.Runtime.CompilerServices;
 using Contacts.Model;
 using Contacts.Model.Services;
 using System.Collections.ObjectModel;
+using System.Windows.Media;
+using System.Collections.Generic;
 
 namespace Contacts.ViewModel
 {
-    class MainVM : INotifyPropertyChanged
+    class MainVM : INotifyPropertyChanged, IDataErrorInfo
     {
         /// <summary>
         /// Поле обработчика команды сохранения.
@@ -28,6 +30,11 @@ namespace Contacts.ViewModel
         /// Поле обработчика команды добавления.
         /// </summary>
         private RelayCommand _editCommand;
+
+        /// <summary>
+        /// Словарь ошибок.
+        /// </summary>
+        public Dictionary<string, string> _errorCollection = GenerateBaseDictianory();
 
         /// <summary>
         /// Поле видимости.
@@ -70,6 +77,26 @@ namespace Contacts.ViewModel
         public bool EditMode { get; set; } = false;
 
         /// <summary>
+        /// Свойство цвета фона имени.
+        /// </summary>
+        private Brush _nameColor;
+
+        /// <summary>
+        /// Свойство цвета фона Email.
+        /// </summary>
+        private Brush _emailColor;
+
+        /// <summary>
+        /// Свойство цвета фона номера.
+        /// </summary>
+        private Brush _numberColor;
+
+        /// <summary>
+        /// Свойство работы кнопки.
+        /// </summary>
+        private bool _isEnabledButton = true;
+
+        /// <summary>
         /// Свойство массива контактов.
         /// </summary>
         public ObservableCollection<Contact> ContactsList
@@ -83,57 +110,138 @@ namespace Contacts.ViewModel
                 _contactsList = value;
                 OnPropertyChanged(nameof(ContactsList));
             }
-
+        }
+        
+        /// <summary>
+        /// Свойство словаря ошибок.
+        /// </summary>
+        public Dictionary<string, string> ErrorCollection
+        {
+            get
+            {
+                return _errorCollection;
+            }
+            set
+            {
+                _errorCollection = value;
+                OnPropertyChanged("ErrorCollection");
+            }
         }
 
         /// <summary>
-        /// Возращает и задает имя контакта.
-        /// Формат вводимых данных: Ivanov Ivan Ivanovich.
+        /// Свойство выбранного контакта.
+        /// </summary>
+        public Contact SelectedItem
+        {
+            get
+            {
+                return _selectedItem;
+            }
+            set
+            {
+                _selectedItem = value;
+                if (_selectedItem != null)
+                {
+                    Name = SelectedItem.Name;
+                    Number = SelectedItem.Number;
+                    Email = SelectedItem.Email;
+                    IsEnabled = true;
+                    CloneContact = (Contact)SelectedItem.Clone();
+                    OnPropertyChanged(nameof(SelectedItem));
+                }
+            }
+        }
+
+        /// <summary>
+        /// Свойство отображаемого имени.
         /// </summary>
         public string Name
         {
             get
             {
-                return SelectedItem.Name;
+                if (!EditMode)
+                {
+                    return SelectedItem.Name;
+                }
+                else
+                {
+                    return CloneContact.Name;
+                }
             }
             set
             {
-                SelectedItem.Name = value;
-                OnPropertyChanged(nameof(Name));
+                if (!EditMode)
+                {
+                    SelectedItem.Name = value;
+                    OnPropertyChanged(nameof(Name));
+                }
+                else
+                {
+                    CloneContact.Name = value;
+                    OnPropertyChanged(nameof(Name));
+                }
             }
         }
 
         /// <summary>
-        /// Возращает и задает номер контакта.
-        /// Формат вводимых данных: 79224566545.
+        /// Свойство отображаемого номера.
         /// </summary>
         public string Number
         {
             get
             {
-                return SelectedItem.Number;
+                if (!EditMode)
+                {
+                    return SelectedItem.Number;
+                }
+                else
+                {
+                    return CloneContact.Number;
+                }
             }
             set
             {
-                SelectedItem.Number = value;
-                OnPropertyChanged(nameof(Number));
+                if (!EditMode)
+                {
+                    SelectedItem.Number = value;
+                    OnPropertyChanged(nameof(Number));
+                }
+                else
+                {
+                    CloneContact.Number = value;
+                    OnPropertyChanged(nameof(Number));
+                }
             }
         }
 
         /// <summary>
-        /// Возращает и задает номер контакта.
-        /// Формат вводимых данных: something@gmail.com.
+        /// Свойство отображаемого Email.
         /// </summary>
         public string Email
         {
             get
             {
-                return SelectedItem.Email;
+                if (!EditMode)
+                {
+                    return SelectedItem.Email;
+                }
+                else
+                {
+                    return CloneContact.Email;
+                }
             }
             set
             {
-                SelectedItem.Email = value;
-                OnPropertyChanged(nameof(Email));
+                if (!EditMode)
+                {
+                    SelectedItem.Email = value;
+                    OnPropertyChanged(nameof(Email));
+                }
+                else
+                {
+                    CloneContact.Email = value;
+                    OnPropertyChanged(nameof(Email));
+                }
             }
         }
 
@@ -151,6 +259,22 @@ namespace Contacts.ViewModel
             {
                 _isVisible = value;
                 OnPropertyChanged(nameof(IsVisible));
+            }
+        }
+
+        /// <summary>
+        /// Свойство включения кнопки.
+        /// </summary>
+        public bool IsEnabledButton
+        {
+            get
+            {
+                return _isEnabledButton;
+            }
+            set
+            {
+                _isEnabledButton = value;
+                OnPropertyChanged("IsEnabledButton");
             }
         }
 
@@ -187,32 +311,53 @@ namespace Contacts.ViewModel
         }
 
         /// <summary>
-        /// Свойство для выбранного контакта
+        /// Свойство цвета Textbox имени.
         /// </summary>
-        public Contact SelectedItem
+        public Brush NameColor
         {
             get
             {
-                return _selectedItem;
+                return _nameColor;
             }
             set
             {
-                _selectedItem = value;
-                if (_selectedItem != null)
-                {
-                    Name = _selectedItem.Name;
-                    Number = _selectedItem.Number;
-                    Email = _selectedItem.Email;
-                    IsEnabled = true;
-                }
-                if (EditMode)
-                {
-                    CloneContact = (Contact)_selectedItem.Clone();
-                    SelectedIndex = GetCurrentIndex(ContactsList, value);
-                }
-                OnPropertyChanged(nameof(SelectedItem));
+                _nameColor = value;
+                OnPropertyChanged(nameof(NameColor));
             }
         }
+
+        /// <summary>
+        /// Свойство цвета Textbox номера.
+        /// </summary>
+        public Brush NumberColor
+        {
+            get
+            {
+                return _numberColor;
+            }
+            set
+            {
+                _numberColor = value;
+                OnPropertyChanged(nameof(NumberColor));
+            }
+        }
+
+        /// <summary>
+        /// Свойство цвета Textbox Email.
+        /// </summary>
+        public Brush EmailColor
+        {
+            get
+            {
+                return _emailColor;
+            }
+            set
+            {
+                _emailColor = value;
+                OnPropertyChanged(nameof(EmailColor));
+            }
+        }
+
 
         /// <summary>
         /// Свойство команды сохранения.
@@ -228,7 +373,6 @@ namespace Contacts.ViewModel
                         {
                             if (!EditMode)
                             {
-                                ContactValidator.AssertContact(SelectedItem);
                                 ContactsList.Add(SelectedItem);
                                 ContactSerializer.SaveContact(ContactsList);
                                 MessageBox.Show("Данные успешно сохранены.", "Сохранение",
@@ -237,7 +381,8 @@ namespace Contacts.ViewModel
                             else
                             {
                                 EditMode = false;
-                                ContactsList[SelectedIndex] = SelectedItem;
+                                ContactsList[SelectedIndex] = CloneContact;
+                                SelectedItem = new Contact();
                                 ContactSerializer.SaveContact(ContactsList);
                                 MessageBox.Show("Данные успешно изменены.", "Изменение",
                                     MessageBoxButton.OK, MessageBoxImage.Information);
@@ -331,11 +476,95 @@ namespace Contacts.ViewModel
                 return _editCommand ??
                     (_editCommand = new RelayCommand(obj =>
                     {
-                        EditModeOn();
-                        EditMode = true;
-                        CloneContact = SelectedItem;
-                        SelectedItem = (Contact)CloneContact.Clone();
+                        if (!EditMode)
+                        {
+                            EditModeOn();
+                            EditMode = true;
+                            CloneContact = (Contact)SelectedItem.Clone();
+                        }
+                        else
+                        {
+                            EditMode = false;
+                            EditModeOff();
+                        }
                     }));
+            }
+        }
+        /// <summary>
+        /// Свойство ошибки.
+        /// </summary>
+        public string Error
+        {
+            get
+            {
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// Событие обрабатывает изменение полей контакта.
+        /// </summary>
+        /// <param name="name">Имя свойства контакта.</param>
+        /// <returns>Имя ошибки.</returns>
+        public string this[string name]
+        {
+            get
+            {
+                string result = null;
+                switch (name)
+                {
+                    case "Name":
+                        result = ContactValidator.AssertName(Name);
+                        if (result != null)
+                        {
+                            NameColor = Brushes.Salmon;
+                        }
+                        else
+                        {
+                            NameColor = Brushes.White;
+                        }
+                        break;
+                    case "Number":
+                        result = ContactValidator.AssertNumber(Number);
+                        if (result != null)
+                        {
+                            NumberColor = Brushes.Salmon;
+                        }
+                        else
+                        {
+                            NumberColor = Brushes.White;
+                        }
+                        break;
+                    case "Email":
+                        result = ContactValidator.AssertEmail(Email);
+                        if (result != null)
+                        {
+                            EmailColor = Brushes.Salmon;
+                        }
+                        else
+                        {
+                            EmailColor = Brushes.White;
+                        }
+                        break;
+                }
+                if (ErrorCollection.ContainsKey(name) && result != null)
+                {
+                    ErrorCollection[name] = result;
+                    IsEnabledButton = false;
+                }
+                else if (result != null)
+                {
+                    ErrorCollection.Add(name, result);
+                    IsEnabledButton = false;
+                }
+                else if (result == null)
+                {
+                    IsEnabledButton = true;
+                    ErrorCollection[name] = "The data is correct";
+                }
+
+                OnPropertyChanged("ErrorCollection");
+                return result;
             }
         }
 
@@ -396,6 +625,19 @@ namespace Contacts.ViewModel
                 }
             }
             return -1;
+        }
+
+        /// <summary>
+        /// Метод создает базовый словарь для ошибок.
+        /// </summary>
+        /// <returns>Словарь для ошибок.</returns>
+        static private Dictionary<string, string> GenerateBaseDictianory()
+        {
+            var dict = new Dictionary<string, string>();
+            dict.Add("Name", "The data is correct");
+            dict.Add("Number", "The data is correct");
+            dict.Add("Email", "The data is correct");
+            return dict;
         }
 
         /// <summary>
