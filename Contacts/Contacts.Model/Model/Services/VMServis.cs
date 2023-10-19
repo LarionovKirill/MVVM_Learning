@@ -6,7 +6,7 @@ namespace Contacts.Model.Model.Services
     /// <summary>
     /// Класс с вспомогательными методами MainVM
     /// </summary>
-    public class VMServis
+    public static class VMServis
     {
         /// <summary>
         /// Метод находит индекс в списке контактов.
