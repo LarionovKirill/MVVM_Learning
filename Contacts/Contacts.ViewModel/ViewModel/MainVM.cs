@@ -8,7 +8,6 @@ using System.Collections.Generic;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using System.Windows.Media;
-using Contacts.Model.Services;
 
 namespace Contacts.ViewModel
 {
