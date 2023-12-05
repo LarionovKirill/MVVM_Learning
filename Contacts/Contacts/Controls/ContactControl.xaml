@@ -4,37 +4,50 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:viewmodel="clr-namespace:Contacts.ViewModel"
+    xmlns:viewmodel="clr-namespace:Contacts.ViewModel;assembly=Contacts.ViewModel"
     d:DataContext="{d:DesignInstance Type=viewmodel:MainVM}"
     d:DesignHeight="300"
     d:DesignWidth="500"
     mc:Ignorable="d">
+
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <Style x:Key="MyTextBoxStyle" TargetType="TextBox">
+                <Style.Triggers>
+                    <Trigger Property="Validation.HasError" Value="True">
+                        <Setter Property="Background" Value="Red"/>
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+        </ResourceDictionary>
+    </UserControl.Resources>
+
     <Grid>
         <StackPanel Margin="0">
             <TextBlock Margin="3" FontSize="12">Name:</TextBlock>
             <TextBox
                 Width="Auto"
                 Margin="3"
-                Background="{Binding NameColor}"
                 IsReadOnly="{Binding Path=ReadOnly, UpdateSourceTrigger=PropertyChanged}"
+                Style="{StaticResource MyTextBoxStyle}"
                 Text="{Binding Path=Name, ValidatesOnDataErrors=true, UpdateSourceTrigger=PropertyChanged}"
                 ToolTip="{Binding ErrorCollection[Name], UpdateSourceTrigger=PropertyChanged}"/>
             <TextBlock Margin="3" FontSize="12">Phone Number:</TextBlock>
             <TextBox
                 Width="Auto"
                 Margin="3"
-                Background="{Binding NumberColor}"
                 DataObject.Pasting="TextBoxPaste"
                 IsReadOnly="{Binding Path=ReadOnly}"
                 PreviewTextInput="TextBox_PreviewTextInput"
-                Text="{Binding Path=Number, ValidatesOnDataErrors=true, UpdateSourceTrigger=PropertyChanged}"
+                Style="{StaticResource MyTextBoxStyle}"
+                Text="{Binding Number, ValidatesOnDataErrors=true, UpdateSourceTrigger=PropertyChanged}"
                 ToolTip="{Binding ErrorCollection[Number], UpdateSourceTrigger=PropertyChanged}"/>
             <TextBlock Margin="3" FontSize="12">Email:</TextBlock>
             <TextBox
                 Width="Auto"
                 Margin="3"
-                Background="{Binding EmailColor}"
                 IsReadOnly="{Binding Path=ReadOnly, UpdateSourceTrigger=PropertyChanged}"
+                Style="{StaticResource MyTextBoxStyle}"
                 Text="{Binding Path=Email, ValidatesOnDataErrors=true, UpdateSourceTrigger=PropertyChanged}"
                 ToolTip="{Binding ErrorCollection[Email], UpdateSourceTrigger=PropertyChanged}"/>
         </StackPanel>

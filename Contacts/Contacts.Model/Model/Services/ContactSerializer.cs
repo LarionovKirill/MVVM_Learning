@@ -2,7 +2,6 @@
 using System.IO;
 using Newtonsoft.Json;
 using System.Collections.ObjectModel;
-using Contacts.ViewModel;
 
 namespace Contacts.Model.Services
 {

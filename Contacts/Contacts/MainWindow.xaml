@@ -5,7 +5,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:view="clr-namespace:View"
-    xmlns:viewmodel="clr-namespace:Contacts.ViewModel"
+    xmlns:viewmodel="clr-namespace:Contacts.ViewModel;assembly=Contacts.ViewModel"
     xmlns:uc="clr-namespace:Contacts.Controls"
     Title="Contacts"
     MinWidth="800"

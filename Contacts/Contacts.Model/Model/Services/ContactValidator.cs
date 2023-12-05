@@ -1,5 +1,4 @@
 ﻿
-
 namespace Contacts.Model.Services
 {
     /// <summary>
@@ -12,7 +11,7 @@ namespace Contacts.Model.Services
         /// </summary>
         /// <param name="name">Переданное имя.</param>
         /// <returns>Имя ошибки для отображения.</returns>
-        internal static string AssertName(string name)
+        public static string AssertName(string name)
         {
             if (name != null)
             {
@@ -33,7 +32,7 @@ namespace Contacts.Model.Services
         /// </summary>
         /// <param name="number">Преданный номер.</param>
         /// <returns>Имя ошибки для отображения.</returns>
-        internal static string AssertNumber(string number)
+        public static string AssertNumber(string number)
         {
             if (number != null)
             {
@@ -65,7 +64,7 @@ namespace Contacts.Model.Services
         /// </summary>
         /// <param name="email">Преданный email.</param>
         /// <returns>Имя ошибки для отображения.</returns>
-        internal static string AssertEmail(string email)
+        public static string AssertEmail(string email)
         {
             if (email != null)
             {
